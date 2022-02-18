@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class Panels : MonoBehaviour
 {
+    public Controller Controller;
     public int ID;
     public float falling = 0;
-    Vector3 panelPos;
-    public Controller Controller;
-    
+    bool topPanels = true;
+
 
     private void Awake()
     {
         Controller = GameObject.Find("Controller").GetComponent<Controller>();
-        panelPos = gameObject.transform.position;
     }
     private void Update()
     {
@@ -24,15 +23,13 @@ public class Panels : MonoBehaviour
             if (falling < 0)
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.1f));
-                Controller.isFalling = false;
                 falling = 0;
-                //Controller.FillingInEmptyFields(gameObject);
+                Controller.FillingInEmptyFields(gameObject.transform.position.x);
+                
             }
         }
-        if ((gameObject.GetComponent<SpriteRenderer>().sprite == null))
+        if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
         {
-            //Controller.CreatePanel(Random.Range(0, 6), new Vector3(panelPos.x, Controller.startPosition.y  + 1, 0));
-
             RaycastHit2D[] hits;
             hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
             if (hits != null)
@@ -40,12 +37,25 @@ public class Panels : MonoBehaviour
                 for (int j = 0; j < hits.Length; j++)
                 {
                     hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
+                    if (hits[j].transform.GetComponent<SpriteRenderer>().sprite != null)
+                    {
+                        topPanels = false;
+                    }
+                    
+                        
                 }
-                //Controller.deletedPanel++;
-                Controller.isFalling = true;
-                Destroy(gameObject);
-                
-            }   
+                if (topPanels)
+                {
+                    Destroy(gameObject);
+                    //Controller.CreatePanel(Random.Range(0, 6), gameObject.transform.position);
+                    Controller.FillingInEmptyFields(gameObject.transform.position.x);
+                }
+                else
+                {
+                    Controller.isFalling = true;
+                    Destroy(gameObject);
+                }
+            }            
         }
     }
 

@@ -27,7 +27,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public float ppX;
     public float ppY;
-    public int deletedPanel = 0;
     int countOfScore = 0;
     
 
@@ -53,9 +52,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    /// Blocks one of the axes so that the tile can only be moved along the X or Y axis  ///
+    
     public void OnDrag(PointerEventData eventData)
-    {
-        if (lockDirectX == false && lockDirectY == false)
+    {    
+        if (lockDirectX == false && lockDirectY == false) 
         {
             if (Mathf.Abs(eventData.delta.x) > Mathf.Abs(eventData.delta.y))
             {
@@ -68,10 +69,9 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-    }
+    public void OnBeginDrag(PointerEventData eventData) { }
 
+    ///   Creating a field (countOfPanelsOX - number of columns, countOfPanelsOY - number of rows)   ///
 
     void CreateField(int col, int row) 
     {
@@ -102,24 +102,30 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+                                ///     creating a panel at a specific point      ///
+
     public void CreatePanel(int ID ,Vector3 pos)
     {
         GameObject obj = Instantiate<GameObject>(panels[ID].obj, pos, Quaternion.identity);
         obj.GetComponent<Panels>().ID = ID;
     }
 
-    public void FillingInEmptyFields(GameObject obj)
+                                ///     checking and populating a column with panels     ///
+
+    public void FillingInEmptyFields(float posX)
     {
-        RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(obj.transform.position.x, -startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
+        RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(posX, -startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
         if (panels.Length < countOfPanelsOY)
         {
-            for (int i = 0; i < (countOfPanelsOY - panels.Length); )
+            for (int i = 0; i < (countOfPanelsOY - panels.Length); i++)
             {
-                CreatePanel(Random.Range(0, 6), new Vector3(obj.transform.position.x, startPosition.y + 1 + i, 0));
+                CreatePanel(Random.Range(0, 6), new Vector3(posX, startPosition.y  - i, 0));
             }
         }
+        isFalling = false;
     }
 
+                                ///     Determines the final direction     ///
     public Vector3 Direction()
     {
         if (lockDirectX == true)
@@ -144,6 +150,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             return new Vector3(1, 1);
     }
 
+                                ///     Hitmarker control     ///
+                                
     public void HitMarker(Vector3 pos, bool condition)
     {
         if (pos != null)
@@ -154,6 +162,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         else
             marker.SetActive(condition);
     }
+
+                                ///    Rearrangement of tiles     ///
 
     public void Transposition()
     {
@@ -166,9 +176,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             if (hitPanel && matchFound)
             {
                 currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
-                //Debug.Log(hitPanel.transform.gameObject.transform.position);
                 hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
-                //Debug.Log(new Vector3(ppX, ppY, 0));
                 matchFound = false;
             }
             else
@@ -177,6 +185,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
     }
+
+                                ///     General method for finding matches     ///
 
     public void AllMatches()
     {
@@ -203,7 +213,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
     
-
+                                ///      Find Matches      ///
+    
     private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, GameObject secondObj, Vector3 secObjPos)
     {
         List<GameObject> matchingTiles = new List<GameObject>();
@@ -261,6 +272,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 for (int i = 0; i < 4; i++)
                 {
+                    objList[i].GetComponent<Panels>().Controller = gameObject.GetComponent<Controller>();
                     objList[i].GetComponent<SpriteRenderer>().sprite = null;
                 }
                 countOfScore += 400;
@@ -269,6 +281,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         }
     }
+
+                                ///      Button controllers      ///
 
     public void RestartTheApp()
     {
