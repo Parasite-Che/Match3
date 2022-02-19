@@ -14,50 +14,6 @@ public class Panels : MonoBehaviour
     {
         Controller = GameObject.Find("Controller").GetComponent<Controller>();
     }
-    private void Update()
-    {
-        if (falling > 0)
-        {
-            transform.position += new Vector3(0, -0.05f, 0);
-            falling -= 0.05f;
-            if (falling < 0)
-            {
-                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.1f));
-                falling = 0;
-                Controller.FillingInEmptyFields(gameObject.transform.position.x);
-                
-            }
-        }
-        if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
-        {
-            RaycastHit2D[] hits;
-            hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
-            if (hits != null)
-            {
-                for (int j = 0; j < hits.Length; j++)
-                {
-                    hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
-                    if (hits[j].transform.GetComponent<SpriteRenderer>().sprite != null)
-                    {
-                        topPanels = false;
-                    }
-                    
-                        
-                }
-                if (topPanels)
-                {
-                    Destroy(gameObject);
-                    //Controller.CreatePanel(Random.Range(0, 6), gameObject.transform.position);
-                    Controller.FillingInEmptyFields(gameObject.transform.position.x);
-                }
-                else
-                {
-                    Controller.isFalling = true;
-                    Destroy(gameObject);
-                }
-            }            
-        }
-    }
 
     private void OnMouseDown()
     {
@@ -104,4 +60,51 @@ public class Panels : MonoBehaviour
             }
         }
     }
+
+    private void Update()
+    {
+        if (falling > 0)
+        {
+            transform.position += new Vector3(0, -0.05f, 0);
+            falling -= 0.05f;
+            if (falling < 0)
+            {
+                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.1f));
+                falling = 0;
+                Controller.FillingInEmptyFields(gameObject.transform.position.x);
+                
+            }
+        }
+        if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
+        {
+            RaycastHit2D[] hits;
+            hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
+            if (hits != null)
+            {
+                for (int j = 0; j < hits.Length; j++)
+                {
+                    hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
+                    if (hits[j].transform.GetComponent<SpriteRenderer>().sprite != null)
+                    {
+                        topPanels = false;
+                    }
+                    
+                        
+                }
+                if (topPanels)
+                {
+                    Destroy(gameObject);
+                    //Controller.CreatePanel(Random.Range(0, 6), gameObject.transform.position);
+                    Controller.FillingInEmptyFields(gameObject.transform.position.x);
+                }
+                else
+                {
+                    Controller.isFalling = true;
+                    Destroy(gameObject);
+                }
+            }            
+        }
+    }
+
+    
 }
