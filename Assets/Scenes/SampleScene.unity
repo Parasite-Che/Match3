@@ -794,7 +794,6 @@ MonoBehaviour:
   hold: 0
   lockDirectX: 0
   lockDirectY: 0
-  matchFound: 0
   isFalling: 0
   clickPos: {x: 0, y: 0}
   ppX: 0

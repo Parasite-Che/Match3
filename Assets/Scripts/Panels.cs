@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Panels : MonoBehaviour
 {
+    public Controller Controller;
     public int ID;
     public float falling = 0;
-    public Controller Controller;
+
     bool topPanels = true;
 
 
@@ -14,23 +15,24 @@ public class Panels : MonoBehaviour
     {
         Controller = GameObject.Find("Controller").GetComponent<Controller>();
     }
+
     private void Update()
     {
         if (falling > 0)
         {
-            transform.position += new Vector3(0, -0.05f, 0);
-            falling -= 0.05f;
+            transform.position += new Vector3(0, -0.07f, 0);
+            falling -= 0.07f;
+            Controller.isFalling = true;
             if (falling < 0)
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.1f));
                 falling = 0;
                 Controller.FillingInEmptyFields(gameObject.transform.position.x);
-                
+
             }
         }
         if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
         {
-            //Controller.CreatePanel(Random.Range(0, 6), new Vector3(panelPos.x, Controller.startPosition.y  + 1, 0));
             RaycastHit2D[] hits;
             hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
             if (hits != null)
@@ -42,8 +44,6 @@ public class Panels : MonoBehaviour
                     {
                         topPanels = false;
                     }
-                    
-                        
                 }
                 if (topPanels)
                 {
@@ -53,9 +53,9 @@ public class Panels : MonoBehaviour
                 }
                 else
                 {
-                    Controller.isFalling = true;
                     Destroy(gameObject);
                 }
+
             }            
         }
     }

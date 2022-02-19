@@ -8,28 +8,28 @@ using UnityEngine.SceneManagement;
 public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     public List<Panel> panels = new List<Panel>();
+
     public int countOfPanelsOX;
     public int countOfPanelsOY;
-    public Vector3 startPosition;
+    public float ppX;
+    public float ppY;
+    int countOfScore = 0;
 
-    GameObject[] objList = new GameObject[4];
     public GameObject currentPanel;
     public GameObject secondPanel;
     public GameObject marker;
+    GameObject[] objList = new GameObject[4];
+
 
     public bool hold = false;
     public bool lockDirectX = false;
     public bool lockDirectY = false;
-    public bool matchFound = false;
     public bool isFalling = false;
+    bool matchFound = false;
+
     public Vector2 clickPos;
+    public Vector3 startPosition;
     public RaycastHit2D hitPanel;
-
-    public float ppX;
-    public float ppY;
-    int countOfScore = 0;
-    
-
 
     private void Start()
     {
@@ -52,9 +52,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    /// Blocks one of the axes so that the tile can only be moved along the X or Y axis  ///
+    
     public void OnDrag(PointerEventData eventData)
-    {
-        if (lockDirectX == false && lockDirectY == false)
+    {    
+        if (lockDirectX == false && lockDirectY == false) 
         {
             if (Mathf.Abs(eventData.delta.x) > Mathf.Abs(eventData.delta.y))
             {
@@ -67,10 +69,9 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-    }
+    public void OnBeginDrag(PointerEventData eventData) { }
 
+    ///   Creating a field (countOfPanelsOX - number of columns, countOfPanelsOY - number of rows)   ///
 
     void CreateField(int col, int row) 
     {
@@ -101,11 +102,15 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+                                ///     creating a panel at a specific point      ///
+
     public void CreatePanel(int ID ,Vector3 pos)
     {
         GameObject obj = Instantiate<GameObject>(panels[ID].obj, pos, Quaternion.identity);
         obj.GetComponent<Panels>().ID = ID;
     }
+
+                                ///     checking and populating a column with panels     ///
 
     public void FillingInEmptyFields(float posX)
     {
@@ -120,6 +125,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         isFalling = false;
     }
 
+                                ///     Determines the final direction     ///
     public Vector3 Direction()
     {
         if (lockDirectX == true)
@@ -144,6 +150,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             return new Vector3(1, 1);
     }
 
+                                ///     Hitmarker control     ///
+                                
     public void HitMarker(Vector3 pos, bool condition)
     {
         if (pos != null)
@@ -186,10 +194,10 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
                                       ////        Clear match on Axes         ////
 
-            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject, hitPanel.transform.gameObject.transform.position);
-            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, currentPanel, hitPanel.transform.gameObject, hitPanel.transform.gameObject.transform.position);
-            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, hitPanel.transform.gameObject, currentPanel, new Vector3(ppX, ppY, 0));
-            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, hitPanel.transform.gameObject, currentPanel, new Vector3(ppX, ppY, 0));
+            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
+            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, currentPanel, hitPanel.transform.gameObject.transform.position);
+            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
 
                                       ////        Clear match on cube         ////
 
@@ -204,10 +212,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, -1, 0), new Vector3(ppX, ppY, 0));
         }
     }
-    
-                                ///      Find Matches      ///
-    
-    private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, GameObject secondObj, Vector3 secObjPos)
+
+                            ///      Find Matches and delete sprite     ///
+
+    private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
+
     {
         List<GameObject> matchingTiles = new List<GameObject>();
         RaycastHit2D hit = Physics2D.Raycast(secObjPos, castDir, 1f, LayerMask.GetMask("Panel"));
@@ -223,14 +232,13 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     }
 
-    void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, GameObject secondObj, Vector3 secObjPos)
+    void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
     {
 
-        List<GameObject> matchingTiles = new List<GameObject>();
-        matchingTiles.Add(firstObj);
+        List<GameObject> matchingTiles = new List<GameObject> { firstObj };
         for (int i = 0; i < paths.Length; i++)
         {
-            matchingTiles.AddRange(FindMatch(paths[i], firstObj, secondObj,  secObjPos));
+            matchingTiles.AddRange(FindMatch(paths[i], firstObj,  secObjPos));
         }
         if (matchingTiles.Count >= 3)
         {
