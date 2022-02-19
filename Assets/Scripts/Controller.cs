@@ -31,7 +31,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Vector3 startPosition;
     public RaycastHit2D hitPanel;
 
-
     private void Start()
     {
         Application.targetFrameRate = 60;
@@ -217,6 +216,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                             ///      Find Matches and delete sprite     ///
 
     private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
+
     {
         List<GameObject> matchingTiles = new List<GameObject>();
         RaycastHit2D hit = Physics2D.Raycast(secObjPos, castDir, 1f, LayerMask.GetMask("Panel"));

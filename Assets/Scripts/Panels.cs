@@ -7,6 +7,7 @@ public class Panels : MonoBehaviour
     public Controller Controller;
     public int ID;
     public float falling = 0;
+
     bool topPanels = true;
 
 
@@ -27,6 +28,7 @@ public class Panels : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.1f));
                 falling = 0;
                 Controller.FillingInEmptyFields(gameObject.transform.position.x);
+
             }
         }
         if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
@@ -42,8 +44,6 @@ public class Panels : MonoBehaviour
                     {
                         topPanels = false;
                     }
-                    
-                        
                 }
                 if (topPanels)
                 {
@@ -55,6 +55,7 @@ public class Panels : MonoBehaviour
                 {
                     Destroy(gameObject);
                 }
+
             }            
         }
     }
