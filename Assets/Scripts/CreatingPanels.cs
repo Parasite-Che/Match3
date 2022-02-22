@@ -60,7 +60,7 @@ public class CreatingPanels : MonoBehaviour
         {
             for (int i = 0; i < (countOfPanelsOY - panels.Length); i++)
             {
-                CreatePanel(Random.Range(0, 6), new Vector3(posX, startPosition.y - i, 0));
+               CreatePanel(Random.Range(0, 6), new Vector3(posX, startPosition.y - i, 0));
             }
         }
         isFalling = false;

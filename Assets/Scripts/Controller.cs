@@ -20,7 +20,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public GameObject secondPanel;
     public GameObject marker;
     public GameObject UIbonusBar;
-    GameObject[] objList = new GameObject[4];
+    readonly GameObject[] objList = new GameObject[4];
 
 
     public bool hold = false;
@@ -155,28 +155,44 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
                                 ///     General method for finding matches     ///
 
-    public void AllMatches()
+    public void AllMatches(bool oneObj, GameObject obj)
     {
-        if (hitPanel)
+        if (oneObj)
         {
-                                      ////        Clear match on Axes         ////
+            obj.GetComponent<BoxCollider2D>().enabled = false;
+            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, obj, obj.transform.position);
+            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, obj, obj.transform.position);
 
-            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
-            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, currentPanel, hitPanel.transform.gameObject.transform.position);
-            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
-            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+            //ClearMatchOnCub(obj, new Vector3(1, 1, 0), obj.transform.position);
+            //ClearMatchOnCub(obj, new Vector3(-1, 1, 0), obj.transform.position);
+            //ClearMatchOnCub(obj, new Vector3(1, -1, 0), obj.transform.position);
+            //ClearMatchOnCub(obj, new Vector3(-1, -1, 0), obj.transform.position);
+            obj.GetComponent<BoxCollider2D>().enabled = true;
+        }
+        else
+        {
+            if (hitPanel)
+            {
 
-                                      ////        Clear match on cube         ////
+                ////        Clear match on Axes         ////
 
-            ClearMatchOnCub(currentPanel, new Vector3(1, 1, 0), hitPanel.transform.position);
-            ClearMatchOnCub(currentPanel, new Vector3(-1, 1, 0), hitPanel.transform.position);
-            ClearMatchOnCub(currentPanel, new Vector3(1, -1, 0), hitPanel.transform.position);
-            ClearMatchOnCub(currentPanel, new Vector3(-1, -1, 0), hitPanel.transform.position);
+                ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+                ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
 
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, 1, 0), new Vector3(ppX, ppY, 0));
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, 1, 0), new Vector3(ppX, ppY, 0));
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, -1, 0), new Vector3(ppX, ppY, 0));
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, -1, 0), new Vector3(ppX, ppY, 0));
+                ////        Clear match on cube         ////
+
+                ClearMatchOnCub(currentPanel, new Vector3(1, 1, 0), hitPanel.transform.position);
+                ClearMatchOnCub(currentPanel, new Vector3(-1, 1, 0), hitPanel.transform.position);
+                ClearMatchOnCub(currentPanel, new Vector3(1, -1, 0), hitPanel.transform.position);
+                ClearMatchOnCub(currentPanel, new Vector3(-1, -1, 0), hitPanel.transform.position);
+
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, 1, 0), new Vector3(ppX, ppY, 0));
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, 1, 0), new Vector3(ppX, ppY, 0));
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, -1, 0), new Vector3(ppX, ppY, 0));
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, -1, 0), new Vector3(ppX, ppY, 0));
+            }
         }
     }
 

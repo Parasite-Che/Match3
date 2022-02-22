@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+using System;
 
 public class Panels : MonoBehaviour
 {
@@ -28,6 +30,7 @@ public class Panels : MonoBehaviour
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.15f));
                 falling = 0;
+                //Controller.AllMatches(true, gameObject);
                 creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
 
             }
@@ -89,7 +92,7 @@ public class Panels : MonoBehaviour
                 if (Controller.hitPanel)
                     Controller.hitPanel.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 
-                Controller.AllMatches();
+                Controller.AllMatches(false, null);
                 Controller.Transposition();
                 Controller.HitMarker(new Vector3(), false);
 
@@ -105,11 +108,4 @@ public class Panels : MonoBehaviour
             }
         }
     }
-
-    private void Bonus<T>(T s)
-    {
-        
-    }
 }
-
-

@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class UIBonusBar : MonoBehaviour
 {
-    public static UIBonusBar instance { get; private set; }
+    public static UIBonusBar Instance { get; private set; }
 
     public Image mask;
     float originalSize;
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     void Start()
