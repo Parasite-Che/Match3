@@ -1,33 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+using System;
 
 public class Panels : MonoBehaviour
 {
-    public Controller Controller;
+    Controller Controller;
+    CreatingPanels creatingPanel;
     public int ID;
     public float falling = 0;
-
+    
     bool topPanels = true;
-
 
     private void Awake()
     {
         Controller = GameObject.Find("Controller").GetComponent<Controller>();
+        creatingPanel = GameObject.Find("Controller").GetComponent<CreatingPanels>();
     }
 
     private void Update()
     {
         if (falling > 0)
         {
-            transform.position += new Vector3(0, -0.07f, 0);
-            falling -= 0.07f;
-            Controller.isFalling = true;
+            transform.position += new Vector3(0, -0.1f, 0);
+            falling -= 0.1f;
+            creatingPanel.isFalling = true;
             if (falling < 0)
             {
-                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.1f));
+                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.15f));
                 falling = 0;
-                Controller.FillingInEmptyFields(gameObject.transform.position.x);
+                //Controller.AllMatches(true, gameObject);
+                creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
 
             }
         }
@@ -48,8 +52,7 @@ public class Panels : MonoBehaviour
                 if (topPanels)
                 {
                     Destroy(gameObject);
-                    //Controller.CreatePanel(Random.Range(0, 6), gameObject.transform.position);
-                    Controller.FillingInEmptyFields(gameObject.transform.position.x);
+                    creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
                 }
                 else
                 {
@@ -62,7 +65,7 @@ public class Panels : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!Controller.isFalling)
+        if (!creatingPanel.isFalling)
         {
             Controller.currentPanel = gameObject;
             if (Controller.currentPanel != null)
@@ -89,7 +92,7 @@ public class Panels : MonoBehaviour
                 if (Controller.hitPanel)
                     Controller.hitPanel.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 
-                Controller.AllMatches();
+                Controller.AllMatches(false, null);
                 Controller.Transposition();
                 Controller.HitMarker(new Vector3(), false);
 

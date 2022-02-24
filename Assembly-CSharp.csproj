@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{9AA8F1C3-90B1-0539-C005-EE25332EA915}</ProjectGuid>
+    <ProjectGuid>{E1E40DBD-48AE-5480-71BE-DF8814BDDA9F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Controller.cs" />
     <Compile Include="Assets\Scripts\Panels.cs" />
+    <Compile Include="Assets\Scripts\CreatingPanels.cs" />
+    <Compile Include="Assets\Scripts\UIBonusBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

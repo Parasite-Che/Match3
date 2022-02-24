@@ -9,32 +9,38 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     public List<Panel> panels = new List<Panel>();
 
-    public int countOfPanelsOX;
-    public int countOfPanelsOY;
     public float ppX;
     public float ppY;
     int countOfScore = 0;
+    int scorePerPanel = 100;
 
+    public CreatingPanels creatingPanel;
     public GameObject currentPanel;
     public GameObject secondPanel;
     public GameObject marker;
-    GameObject[] objList = new GameObject[4];
+    public GameObject UIbonusBar;
+    readonly GameObject[] objList = new GameObject[4];
 
 
     public bool hold = false;
     public bool lockDirectX = false;
     public bool lockDirectY = false;
-    public bool isFalling = false;
     bool matchFound = false;
 
+    public Text upgradeTimeUI;
+    public float upgradeTimeDecrease;
+    public float upgradeTimeMax;
+    float dynamicUpgradeTime = 0;
+    int countOfMatches = 0;
+
     public Vector2 clickPos;
-    public Vector3 startPosition;
     public RaycastHit2D hitPanel;
 
     private void Start()
     {
         Application.targetFrameRate = 60;
-        CreateField(countOfPanelsOY, countOfPanelsOX);
+        creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
+        UIbonusBar.transform.parent.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -49,6 +55,20 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 currentPanel.transform.position = new Vector3(ppX, ppY + ((Input.mousePosition.y - clickPos.y) / Screen.height), -1);
             }
+        }
+
+        if (dynamicUpgradeTime > 0)
+        {
+            dynamicUpgradeTime -= upgradeTimeDecrease;
+            UIbonusBar.GetComponent<UIBonusBar>().SetValue(dynamicUpgradeTime / upgradeTimeMax);
+        }
+        else if(dynamicUpgradeTime < 0)
+        {
+            upgradeTimeUI.text = "";
+            dynamicUpgradeTime = 0;
+            countOfMatches = 0;
+            scorePerPanel = 100;
+            UIbonusBar.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -70,60 +90,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
 
     public void OnBeginDrag(PointerEventData eventData) { }
-
-    ///   Creating a field (countOfPanelsOX - number of columns, countOfPanelsOY - number of rows)   ///
-
-    void CreateField(int col, int row) 
-    {
-        Vector3 cp = startPosition;
-        int rand = -1;
-        int[] previousAbove = new int[countOfPanelsOX];
-        int previousLeft = -1;
-
-        for (int i = 0; i < col; i++)
-        {
-            for (int j = 0; j < row; j++)
-            {
-
-                while (rand == previousLeft || rand == previousAbove[j])
-                {
-                    rand = Random.Range(0, 6);
-                }
-
-                if (rand != -1) {
-                    GameObject obj = Instantiate<GameObject>(panels[rand].obj, new Vector3(cp.x + j, cp.y - i, 0), Quaternion.identity);
-                    obj.GetComponent<Panels>().ID = rand;
-                    previousAbove[j] = obj.GetComponent<Panels>().ID;
-                    previousLeft = obj.GetComponent<Panels>().ID;
-                }
-            }
-            previousLeft = -1;
-            cp.x = startPosition.x;
-        }
-    }
-
-                                ///     creating a panel at a specific point      ///
-
-    public void CreatePanel(int ID ,Vector3 pos)
-    {
-        GameObject obj = Instantiate<GameObject>(panels[ID].obj, pos, Quaternion.identity);
-        obj.GetComponent<Panels>().ID = ID;
-    }
-
-                                ///     checking and populating a column with panels     ///
-
-    public void FillingInEmptyFields(float posX)
-    {
-        RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(posX, -startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
-        if (panels.Length < countOfPanelsOY)
-        {
-            for (int i = 0; i < (countOfPanelsOY - panels.Length); i++)
-            {
-                CreatePanel(Random.Range(0, 6), new Vector3(posX, startPosition.y  - i, 0));
-            }
-        }
-        isFalling = false;
-    }
 
                                 ///     Determines the final direction     ///
     public Vector3 Direction()
@@ -188,28 +154,44 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
                                 ///     General method for finding matches     ///
 
-    public void AllMatches()
+    public void AllMatches(bool oneObj, GameObject obj)
     {
-        if (hitPanel)
+        if (oneObj)
         {
-                                      ////        Clear match on Axes         ////
+            obj.GetComponent<BoxCollider2D>().enabled = false;
+            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, obj, obj.transform.position);
+            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, obj, obj.transform.position);
 
-            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
-            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, currentPanel, hitPanel.transform.gameObject.transform.position);
-            ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
-            ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+            //ClearMatchOnCub(obj, new Vector3(1, 1, 0), obj.transform.position);
+            //ClearMatchOnCub(obj, new Vector3(-1, 1, 0), obj.transform.position);
+            //ClearMatchOnCub(obj, new Vector3(1, -1, 0), obj.transform.position);
+            //ClearMatchOnCub(obj, new Vector3(-1, -1, 0), obj.transform.position);
+            obj.GetComponent<BoxCollider2D>().enabled = true;
+        }
+        else
+        {
+            if (hitPanel)
+            {
 
-                                      ////        Clear match on cube         ////
+                ////        Clear match on Axes         ////
 
-            ClearMatchOnCub(currentPanel, new Vector3(1, 1, 0), hitPanel.transform.position);
-            ClearMatchOnCub(currentPanel, new Vector3(-1, 1, 0), hitPanel.transform.position);
-            ClearMatchOnCub(currentPanel, new Vector3(1, -1, 0), hitPanel.transform.position);
-            ClearMatchOnCub(currentPanel, new Vector3(-1, -1, 0), hitPanel.transform.position);
+                ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+                ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
 
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, 1, 0), new Vector3(ppX, ppY, 0));
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, 1, 0), new Vector3(ppX, ppY, 0));
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, -1, 0), new Vector3(ppX, ppY, 0));
-            ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, -1, 0), new Vector3(ppX, ppY, 0));
+                ////        Clear match on cube         ////
+
+                ClearMatchOnCub(currentPanel, new Vector3(1, 1, 0), hitPanel.transform.position);
+                ClearMatchOnCub(currentPanel, new Vector3(-1, 1, 0), hitPanel.transform.position);
+                ClearMatchOnCub(currentPanel, new Vector3(1, -1, 0), hitPanel.transform.position);
+                ClearMatchOnCub(currentPanel, new Vector3(-1, -1, 0), hitPanel.transform.position);
+
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, 1, 0), new Vector3(ppX, ppY, 0));
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, 1, 0), new Vector3(ppX, ppY, 0));
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(1, -1, 0), new Vector3(ppX, ppY, 0));
+                ClearMatchOnCub(hitPanel.transform.gameObject, new Vector3(-1, -1, 0), new Vector3(ppX, ppY, 0));
+            }
         }
     }
 
@@ -245,11 +227,18 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             for (int i = 0; i < matchingTiles.Count; i++)
             {
                 //Debug.Log(matchingTiles[i]);
-                matchingTiles[i].GetComponent<Panels>().Controller = gameObject.GetComponent<Controller>();
                 matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                countOfScore += 100;
+                countOfScore += scorePerPanel;
             }
             GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
+            dynamicUpgradeTime = upgradeTimeMax;
+            countOfMatches++;
+            UIbonusBar.transform.parent.gameObject.SetActive(true);
+            if (countOfMatches % 2 == 0)
+            {
+                scorePerPanel *= 2;
+                upgradeTimeUI.text = "Bonus X" + (scorePerPanel / 100).ToString();
+            }
             matchFound = true;
         }
     }
@@ -272,10 +261,18 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    objList[i].GetComponent<Panels>().Controller = gameObject.GetComponent<Controller>();
                     objList[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += scorePerPanel;
+                    
                 }
-                countOfScore += 400;
+                UIbonusBar.transform.parent.gameObject.SetActive(true);
+                dynamicUpgradeTime = upgradeTimeMax;
+                countOfMatches++;
+                if (countOfMatches % 2 == 0)
+                {
+                    scorePerPanel *= 2;
+                    upgradeTimeUI.text = "Bonus X" + (scorePerPanel / 100).ToString();
+                }
                 matchFound = true;
             }
 
