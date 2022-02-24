@@ -9,7 +9,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     public List<Panel> panels = new List<Panel>();
 
-    
     public float ppX;
     public float ppY;
     int countOfScore = 0;
