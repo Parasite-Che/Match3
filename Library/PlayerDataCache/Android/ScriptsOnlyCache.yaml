@@ -2,18 +2,17 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Controller
+    - CreatingPanels
     - Panels
+    - UIBonusBar
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
-    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
-    - UnityEditor.Tilemaps.GridPaletteBrushes
-    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
@@ -55,21 +54,25 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1506}
     - Class: 114
-      Script: {instanceID: 2196}
+      Script: {instanceID: 1922}
     - Class: 114
-      Script: {instanceID: 2610}
+      Script: {instanceID: 2198}
     - Class: 114
-      Script: {instanceID: 2770}
+      Script: {instanceID: 2612}
     - Class: 114
-      Script: {instanceID: 2986}
+      Script: {instanceID: 2772}
     - Class: 114
-      Script: {instanceID: 3228}
+      Script: {instanceID: 2988}
     - Class: 114
-      Script: {instanceID: 3340}
+      Script: {instanceID: 3230}
     - Class: 114
-      Script: {instanceID: 3546}
+      Script: {instanceID: 3342}
     - Class: 114
-      Script: {instanceID: 3692}
+      Script: {instanceID: 3548}
+    - Class: 114
+      Script: {instanceID: 3694}
+    - Class: 114
+      Script: {instanceID: 4514}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -173,6 +176,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_FontAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 1292eee39418dadde139324765b6bfe9
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: UIBonusBar
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
@@ -355,7 +364,7 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 39ff17972d0f3830b02f9a35151db10d
+      Hash: da970c6e8118157fb9016b7ac8a05464
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Controller
@@ -373,7 +382,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: 41b87cde47946a17ffc93466f21a04ba
+      Hash: 6fd4d27f14af46805209a112c1bde41c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Panels
@@ -511,6 +520,12 @@ ScriptsOnlyBuild:
     className: TMP_ColorGradient
   - hash:
       serializedVersion: 2
+      Hash: 79d86607aeaf822d1e7fb27a71f3a0a4
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CreatingPanels
+  - hash:
+      serializedVersion: 2
       Hash: 908b3077da284d11de0450423ca1808e
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -620,4 +635,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: E:/distr/Unity/Demo 1/Build/Build_0.01.apk
+  playerPath: E:/distr/Unity/APK/demo1.apk

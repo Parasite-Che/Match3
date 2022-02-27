@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
-using System;
 
 public class Panels : MonoBehaviour
 {
@@ -32,7 +30,6 @@ public class Panels : MonoBehaviour
                 falling = 0;
                 //Controller.AllMatches(true, gameObject);
                 creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
-
             }
         }
         if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
