@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
@@ -289,6 +290,29 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void CloseTheApp()
     {
         Application.Quit();
+    }
+}
+
+public class BonusControl<T> where T : IBonus  {
+
+    public T value;
+
+    public BonusControl(GameObject Obj)
+    {
+        value.Bonus(Obj);
+    }
+}
+
+public interface IBonus
+{
+    public void Bonus(GameObject Obj);
+}
+
+public class Bonus1 : IBonus
+{
+    public void Bonus(GameObject Obj)
+    {
+        Obj.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 200);
     }
 }
 

@@ -36,7 +36,13 @@ public class CreatingPanels : MonoBehaviour
                     obj.GetComponent<Panels>().ID = rand;
                     previousAbove[j] = obj.GetComponent<Panels>().ID;
                     previousLeft = obj.GetComponent<Panels>().ID;
+                    if (i == 3 && j == 3)
+                    {
+                        _ = new BonusControl<Bonus1>(obj);
+
+                    }
                 }
+                
             }
             previousLeft = -1;
             cp.x = startPosition.x;
