@@ -293,4 +293,30 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
 }
 
+public class BonusControl<T> where T : IBonus
+{
+    public BonusControl(GameObject gameObject, T value)
+    {
+        value.Bonus(gameObject);
+    }
+}
 
+public interface IBonus
+{
+    public void Bonus(GameObject Obj);
+}
+
+public class Bonus1 : IBonus
+{
+    public void Bonus(GameObject Obj)
+    {
+        Obj.GetComponent<SpriteRenderer>().color -= new Color32(30, 30, 30, 0);
+    }
+}
+
+[System.Serializable]
+public struct Panel
+{
+    public GameObject obj;
+    public int ID;
+}

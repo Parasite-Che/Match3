@@ -38,6 +38,11 @@ public class Panels : MonoBehaviour
             hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
             if (hits != null)
             {
+                int rand = Random.Range(0, hits.Length + 10);
+                if (rand < hits.Length)
+                {
+                    _ = new BonusControl<Bonus1>(hits[rand].transform.gameObject, new Bonus1());
+                }
                 for (int j = 0; j < hits.Length; j++)
                 {
                     hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
@@ -106,4 +111,3 @@ public class Panels : MonoBehaviour
         }
     }
 }
-

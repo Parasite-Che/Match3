@@ -36,11 +36,6 @@ public class CreatingPanels : MonoBehaviour
                     obj.GetComponent<Panels>().ID = rand;
                     previousAbove[j] = obj.GetComponent<Panels>().ID;
                     previousLeft = obj.GetComponent<Panels>().ID;
-                    if (i == 3 && j == 3)
-                    {
-                        _ = new BonusControl<Bonus1>(obj, new Bonus1());
-
-                    }
                 }
                 
             }
@@ -73,31 +68,3 @@ public class CreatingPanels : MonoBehaviour
     }
 }
 
-public class BonusControl<T> where T : IBonus
-{
-    public BonusControl(GameObject gameObject, T value)
-    {
-        Debug.Log(gameObject);
-        value.Bonus(gameObject);
-    }
-}
-
-public interface IBonus
-{
-    public void Bonus(GameObject Obj);
-}
-
-public class Bonus1 : IBonus
-{
-    public void Bonus(GameObject Obj)
-    {
-        Obj.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 200);
-    }
-}
-
-[System.Serializable]
-public struct Panel
-{
-    public GameObject obj;
-    public int ID;
-}

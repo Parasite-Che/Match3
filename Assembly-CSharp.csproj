@@ -60,7 +60,6 @@
     <Compile Include="Assets\Scripts\Controller.cs" />
     <Compile Include="Assets\Scripts\Panels.cs" />
     <Compile Include="Assets\Scripts\CreatingPanels.cs" />
-    <Compile Include="Assets\Scripts\BonusController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
