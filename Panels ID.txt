@@ -1,0 +1,14 @@
+ID   :   Panel
+--------------
+0    :   Green    
+1    :   Red 
+2    :   White
+3    :   Yellow
+4    :   Blue
+5    :   Pink
+     :
+
+301  :   Cube
+302  :   Line of 4 Panels
+303  :   Line of 4 Panels
+304  :   2 Lines of 3 Panels

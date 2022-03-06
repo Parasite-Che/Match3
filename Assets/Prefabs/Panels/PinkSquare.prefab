@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 0
+  falling: 0
+  bonusName: 
 --- !u!212 &5359555605151220398
 SpriteRenderer:
   m_ObjectHideFlags: 0

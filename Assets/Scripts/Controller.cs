@@ -13,7 +13,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public float ppX;
     public float ppY;
     int countOfScore = 0;
-    int scorePerPanel = 100;
+    int scorePerPanel = 10;
 
     public CreatingPanels creatingPanel;
     public GameObject currentPanel;
@@ -26,14 +26,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool hold = false;
     public bool lockDirectX = false;
     public bool lockDirectY = false;
-    bool matchFound = false;
+    public bool matchFound = false;
 
     public Text upgradeTimeUI;
     public float upgradeTimeDecrease;
     public float upgradeTimeMax;
-    float dynamicUpgradeTime = 0;
-    int countOfMatches = 0;
-
     public Vector2 clickPos;
     public RaycastHit2D hitPanel;
 
@@ -56,20 +53,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 currentPanel.transform.position = new Vector3(ppX, ppY + ((Input.mousePosition.y - clickPos.y) / Screen.height), -1);
             }
-        }
-
-        if (dynamicUpgradeTime > 0)
-        {
-            dynamicUpgradeTime -= upgradeTimeDecrease;
-            UIbonusBar.GetComponent<UIBonusBar>().SetValue(dynamicUpgradeTime / upgradeTimeMax);
-        }
-        else if(dynamicUpgradeTime < 0)
-        {
-            upgradeTimeUI.text = "";
-            dynamicUpgradeTime = 0;
-            countOfMatches = 0;
-            scorePerPanel = 100;
-            UIbonusBar.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -140,10 +123,14 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         else
         {
-            if (hitPanel && matchFound)
+            if ((hitPanel && matchFound) || 
+                (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) ||
+                (currentPanel.GetComponent<Panels>().ID > 300))
             {
                 currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                 hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                UseBonus(currentPanel);
+                UseBonus(hitPanel.transform.gameObject);
                 matchFound = false;
             }
             else
@@ -152,6 +139,30 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
     }
+
+    public void UseBonus(GameObject obj)
+    {
+        if (obj.GetComponent<Panels>().ID > 300)
+        {
+            if (obj.GetComponent<Panels>().bonusName == "CubeBonus")
+            {
+                _ = new BonusControl<CubeBonus>(new CubeBonus());
+            }
+            else if (obj.GetComponent<Panels>().bonusName == "LineBonus4")
+            {
+                _ = new BonusControl<LineBonus4>(new LineBonus4());
+            }
+            else if (obj.GetComponent<Panels>().bonusName == "LineBonus5")
+            {
+                _ = new BonusControl<LineBonus5>(new LineBonus5());
+            }
+            else if (obj.GetComponent<Panels>().bonusName == "LinesOf3Panels")
+            {
+                _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels());
+            }
+        }
+    }
+
 
                                 ///     General method for finding matches     ///
 
@@ -163,10 +174,10 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, obj, obj.transform.position);
             ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, obj, obj.transform.position);
 
-            //ClearMatchOnCub(obj, new Vector3(1, 1, 0), obj.transform.position);
-            //ClearMatchOnCub(obj, new Vector3(-1, 1, 0), obj.transform.position);
-            //ClearMatchOnCub(obj, new Vector3(1, -1, 0), obj.transform.position);
-            //ClearMatchOnCub(obj, new Vector3(-1, -1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(1, 1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(-1, 1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(1, -1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(-1, -1, 0), obj.transform.position);
             obj.GetComponent<BoxCollider2D>().enabled = true;
         }
         else
@@ -225,21 +236,33 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         if (matchingTiles.Count >= 3)
         {
-            for (int i = 0; i < matchingTiles.Count; i++)
+            if (matchingTiles.Count == 3)
             {
-                //Debug.Log(matchingTiles[i]);
-                matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                countOfScore += scorePerPanel;
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += scorePerPanel;
+                }
+            }
+            else if (matchingTiles.Count == 4)
+            {
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += (int)(scorePerPanel * 1.3f);
+                }
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
+            }
+            else
+            {
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += scorePerPanel * 2;
+                }
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_5LineBonus";
             }
             GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
-            dynamicUpgradeTime = upgradeTimeMax;
-            countOfMatches++;
-            UIbonusBar.transform.parent.gameObject.SetActive(true);
-            if (countOfMatches % 2 == 0)
-            {
-                scorePerPanel *= 2;
-                upgradeTimeUI.text = "Bonus X" + (scorePerPanel / 100).ToString();
-            }
             matchFound = true;
         }
     }
@@ -260,27 +283,20 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 objList[0].GetComponent<Panels>().ID == objList[2].GetComponent<Panels>().ID &&
                 objList[0].GetComponent<Panels>().ID == objList[3].GetComponent<Panels>().ID)
             {
+                objList[UnityEngine.Random.Range(0, 4)].gameObject.GetComponent<Panels>().bonusName = "_CubeBonus";
                 for (int i = 0; i < 4; i++)
                 {
                     objList[i].GetComponent<SpriteRenderer>().sprite = null;
-                    countOfScore += scorePerPanel;
-                    
-                }
-                UIbonusBar.transform.parent.gameObject.SetActive(true);
-                dynamicUpgradeTime = upgradeTimeMax;
-                countOfMatches++;
-                if (countOfMatches % 2 == 0)
-                {
-                    scorePerPanel *= 2;
-                    upgradeTimeUI.text = "Bonus X" + (scorePerPanel / 100).ToString();
+                    countOfScore += (int)(scorePerPanel * 1.5f);
                 }
                 matchFound = true;
             }
 
         }
     }
+    // _ = new BonusControl<Bonus1>(hits[rand].transform.gameObject, new Bonus1());
 
-                                ///      Button controllers      ///
+        ///      Button controllers      ///
 
     public void RestartTheApp()
     {
@@ -290,27 +306,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void CloseTheApp()
     {
         Application.Quit();
-    }
-}
-
-public class BonusControl<T> where T : IBonus
-{
-    public BonusControl(GameObject gameObject, T value)
-    {
-        value.Bonus(gameObject);
-    }
-}
-
-public interface IBonus
-{
-    public void Bonus(GameObject Obj);
-}
-
-public class Bonus1 : IBonus
-{
-    public void Bonus(GameObject Obj)
-    {
-        Obj.GetComponent<SpriteRenderer>().color -= new Color32(30, 30, 30, 0);
     }
 }
 
