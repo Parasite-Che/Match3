@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BonusControl<T> where T : IBonus
 {
-    public BonusControl( T value)
+    public BonusControl(T value, GameObject obj)
     {
-        //value.BonusEffect(gameObject);
+        value.BonusEffect(obj);
     }
 
     public BonusControl(GameObject gameObject, T value)
@@ -42,11 +42,19 @@ public class LineBonus4 : IBonus
     {
         Obj.GetComponent<SpriteRenderer>().color = new Color32(214, 231, 86, 255);
         Obj.GetComponent<Panels>().bonusName = "LineBonus4";
+        Obj.GetComponent<Panels>().deleteOY = Obj.GetComponent<Panels>().Controller.verticalBonus;
         Obj.GetComponent<Panels>().ID = 302;
     }
     public void BonusEffect(GameObject Obj)
     {
-
+        if(Obj.GetComponent<Panels>().deleteOY == true)
+        {
+            Obj.GetComponent<Panels>().Controller.ClearLine(Obj, true);
+        }
+        else if (Obj.GetComponent<Panels>().deleteOY == false)
+        {
+            Obj.GetComponent<Panels>().Controller.ClearLine(Obj, false);
+        }
     }
 }
 
@@ -60,7 +68,12 @@ public class LineBonus5 : IBonus
     }
     public void BonusEffect(GameObject Obj)
     {
-
+        List<GameObject> panels = Obj.GetComponent<Panels>().Controller.SingeClolorPanels();
+        Obj.GetComponent<SpriteRenderer>().sprite = null;
+        for (int i = 0; i < panels.Count; i++)
+        {
+            panels[i].GetComponent<SpriteRenderer>().sprite = null;
+        }
     }
 }
 

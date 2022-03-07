@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Panels : MonoBehaviour
 {
-    Controller Controller;
+    public Controller Controller;
     CreatingPanels creatingPanel;
     public int ID;
     public float falling = 0;
+    public bool deleteOY;
 
     public string bonusName = "";
     bool topPanels = true;
@@ -48,22 +49,22 @@ public class Panels : MonoBehaviour
                         topPanels = false;
                     }
                 }
-
+                int rand = Random.Range(0, hits.Length);
                 if (bonusName == "_CubeBonus")
                 {
-                    _ = new BonusControl<CubeBonus>(hits[Random.Range(0, hits.Length)].transform.gameObject, new CubeBonus());
+                    _ = new BonusControl<CubeBonus>(hits[rand].transform.gameObject, new CubeBonus());
                 }
                 else if (bonusName == "_4LineBonus")
                 {
-                    _ = new BonusControl<LineBonus4>(hits[Random.Range(0, hits.Length)].transform.gameObject, new LineBonus4());
+                    _ = new BonusControl<LineBonus4>(hits[rand].transform.gameObject, new LineBonus4());
                 }
                 else if (bonusName == "_5LineBonus")
                 {
-                    _ = new BonusControl<LineBonus5>(hits[Random.Range(0, hits.Length)].transform.gameObject, new LineBonus5());
+                    _ = new BonusControl<LineBonus5>(hits[rand].transform.gameObject, new LineBonus5());
                 }
                 else if (bonusName == "_LinesOf3Panels")
                 {
-                    _ = new BonusControl<LinesOf3Panels>(hits[Random.Range(0, hits.Length)].transform.gameObject, new LinesOf3Panels());
+                    _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
                 }
 
                 if (topPanels)
@@ -108,14 +109,16 @@ public class Panels : MonoBehaviour
                 if (Controller.hitPanel)
                     Controller.hitPanel.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 
+                
                 Controller.AllMatches(false, null);
                 Controller.Transposition();
+                Controller.UseBonus(Controller.currentPanel);
+                if (Controller.hitPanel)
+                    Controller.UseBonus(Controller.hitPanel.transform.gameObject);
+
                 Controller.HitMarker(new Vector3(), false);
-
-
                 if (Controller.hitPanel)
                     Controller.hitPanel.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-
                 Controller.currentPanel.GetComponent<BoxCollider2D>().enabled = true;
                 Controller.hitPanel = new RaycastHit2D();
                 Controller.hold = false;

@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe603aa0ff5d73a4189a5d16e6939f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
   ID: 0
   falling: 0
+  deleteOY: 0
   bonusName: 
 --- !u!212 &5359555605151220398
 SpriteRenderer:

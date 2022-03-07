@@ -27,6 +27,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool lockDirectX = false;
     public bool lockDirectY = false;
     public bool matchFound = false;
+    public bool verticalBonus = false;
 
     public Text upgradeTimeUI;
     public float upgradeTimeDecrease;
@@ -123,15 +124,31 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         else
         {
-            if ((hitPanel && matchFound) || 
-                (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) ||
-                (currentPanel.GetComponent<Panels>().ID > 300))
+            if (hitPanel)
             {
-                currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
-                hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
-                UseBonus(currentPanel);
-                UseBonus(hitPanel.transform.gameObject);
-                matchFound = false;
+                if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) || (currentPanel.GetComponent<Panels>().ID > 300))
+                {
+
+                    currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
+                    hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                    
+                    matchFound = false;
+
+                }
+                else
+                {
+                    if (matchFound)
+                    {
+                        currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
+                        hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                        matchFound = false;
+                    }
+                    else
+                    {
+                        currentPanel.transform.position = new Vector3(ppX, ppY, 0);
+                    }
+
+                }
             }
             else
             {
@@ -146,23 +163,132 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             if (obj.GetComponent<Panels>().bonusName == "CubeBonus")
             {
-                _ = new BonusControl<CubeBonus>(new CubeBonus());
+                _ = new BonusControl<CubeBonus>(new CubeBonus(), obj);
             }
             else if (obj.GetComponent<Panels>().bonusName == "LineBonus4")
             {
-                _ = new BonusControl<LineBonus4>(new LineBonus4());
+                _ = new BonusControl<LineBonus4>(new LineBonus4(), obj);
             }
             else if (obj.GetComponent<Panels>().bonusName == "LineBonus5")
             {
-                _ = new BonusControl<LineBonus5>(new LineBonus5());
+                _ = new BonusControl<LineBonus5>(new LineBonus5(), obj);
             }
             else if (obj.GetComponent<Panels>().bonusName == "LinesOf3Panels")
             {
-                _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels());
+                _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels(), obj);
             }
         }
     }
 
+    private List<GameObject> Line(Vector2 castDir, GameObject obj)
+    {
+        List<GameObject> tiles = new List<GameObject>();
+        tiles.Add(obj);
+        RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+        if(hit.collider != null)
+        {
+            hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+        }
+        while (hit.collider != null)
+        {
+            tiles.Add(hit.collider.gameObject);
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            RaycastHit2D hit2 = Physics2D.Raycast(hit.transform.gameObject.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            hit = hit2;
+        }
+        return tiles;
+
+    }
+
+    public void ClearLine(GameObject obj, bool verticalLine)
+    {
+        List<GameObject> tiles;
+        if (verticalLine)
+        {
+            if (Direction() == new Vector3(0, 1))
+            {
+                tiles = Line(Vector2.up, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.down, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else if (Direction() == new Vector3(0, -1))
+            {
+                tiles = Line(Vector2.down, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.up, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else
+            {
+                tiles = Line(Vector2.up, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.down, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+        }
+        else
+        {
+            if (Direction() == new Vector3(1, 0))
+            {
+                tiles = Line(Vector2.right, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.left, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else if (Direction() == new Vector3(-1, 0))
+            {
+                tiles = Line(Vector2.left, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.right, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else
+            {
+                tiles = Line(Vector2.left, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.right, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+        }
+    }
 
                                 ///     General method for finding matches     ///
 
@@ -228,7 +354,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
     {
-
         List<GameObject> matchingTiles = new List<GameObject> { firstObj };
         for (int i = 0; i < paths.Length; i++)
         {
@@ -252,6 +377,14 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                     countOfScore += (int)(scorePerPanel * 1.3f);
                 }
                 matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
+                if (matchingTiles[1].transform.position.x - matchingTiles[2].transform.position.x == 0)
+                {
+                    verticalBonus = false;
+                }
+                else
+                {
+                    verticalBonus = true;
+                }
             }
             else
             {
@@ -267,6 +400,45 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    private List<GameObject> AllPanels()
+    {
+        List<GameObject> allObj = new List<GameObject>();
+        for (int i = 0; i < creatingPanel.countOfPanelsOX; i++)
+        {
+            RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(creatingPanel.startPosition.x + i, -creatingPanel.startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
+            for (int j = 0; j < panels.Length; j++)
+            {
+                allObj.Add(panels[j].transform.gameObject);
+            }
+        }
+        return allObj;
+    }
+
+    public List<GameObject> SingeClolorPanels()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> SingeClolorPanels = new List<GameObject>();
+        int ID = -1;
+
+        if(currentPanel.GetComponent<Panels>().ID > 300)
+        {
+            ID = hitPanel.transform.gameObject.GetComponent<Panels>().ID;
+        }
+        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
+        {
+            ID = currentPanel.GetComponent<Panels>().ID;
+        }
+
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (allObj[i].GetComponent<Panels>().ID == ID)
+            {
+                SingeClolorPanels.Add(allObj[i]);
+            } 
+        }
+
+        return SingeClolorPanels;
+    }
 
     void ClearMatchOnCub(GameObject Obj, Vector3 dir, Vector3 objPos)
     {
@@ -294,7 +466,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         }
     }
-    // _ = new BonusControl<Bonus1>(hits[rand].transform.gameObject, new Bonus1());
 
         ///      Button controllers      ///
 
