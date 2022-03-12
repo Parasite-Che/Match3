@@ -1,18 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public string loadLevel;
+    public GameObject LoadingPanel;
+    public Slider bar;
+
+    public void StartButton(){
+
+        LoadingPanel.SetActive(true);
+        StartCoroutine(LoadAsync());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RestartTheApp()
     {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void CloseTheApp()
+    {
+        Application.Quit();
+    }
+
+    IEnumerator LoadAsync()
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync(1);
         
+        while (!async.isDone)
+        {
+            bar.value = async.progress;
+            Debug.Log("Load completed");
+            yield return null;
+        }
+
     }
 }

@@ -98,7 +98,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 return new Vector3(0, 0);
         }
         else 
-            return new Vector3(1, 1);
+            return new Vector3(0, 0, 1);
     }
 
                                 ///     Hitmarker control     ///
@@ -118,7 +118,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void Transposition()
     {
-        if (Direction() == new Vector3(0, 0))
+        if (Direction() == new Vector3(0, 0, 1))
         {
             currentPanel.transform.position = new Vector3(ppX, ppY, 0);
         }
@@ -131,7 +131,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
                     currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                     hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
-                    
+                    UseBonus(currentPanel);
+                    UseBonus(hitPanel.transform.gameObject);
                     matchFound = false;
 
                 }
@@ -182,8 +183,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     private List<GameObject> Line(Vector2 castDir, GameObject obj)
     {
-        List<GameObject> tiles = new List<GameObject>();
-        tiles.Add(obj);
+        List<GameObject> tiles = new List<GameObject> { obj };
         RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
         if(hit.collider != null)
         {
@@ -310,7 +310,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             if (hitPanel)
             {
-
                 ////        Clear match on Axes         ////
 
                 ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
@@ -336,7 +335,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                             ///      Find Matches and delete sprite     ///
 
     private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
-
     {
         List<GameObject> matchingTiles = new List<GameObject>();
         RaycastHit2D hit = Physics2D.Raycast(secObjPos, castDir, 1f, LayerMask.GetMask("Panel"));
@@ -349,7 +347,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             hit = hit2;
         }
         return matchingTiles;
-
     }
 
     void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
@@ -455,7 +452,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 objList[0].GetComponent<Panels>().ID == objList[2].GetComponent<Panels>().ID &&
                 objList[0].GetComponent<Panels>().ID == objList[3].GetComponent<Panels>().ID)
             {
-                objList[UnityEngine.Random.Range(0, 4)].gameObject.GetComponent<Panels>().bonusName = "_CubeBonus";
+                objList[UnityEngine.Random.Range(0, 4)].GetComponent<Panels>().bonusName = "_CubeBonus";
                 for (int i = 0; i < 4; i++)
                 {
                     objList[i].GetComponent<SpriteRenderer>().sprite = null;
@@ -465,18 +462,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
 
         }
-    }
-
-        ///      Button controllers      ///
-
-    public void RestartTheApp()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void CloseTheApp()
-    {
-        Application.Quit();
     }
 }
 

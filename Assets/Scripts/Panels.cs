@@ -112,9 +112,6 @@ public class Panels : MonoBehaviour
                 
                 Controller.AllMatches(false, null);
                 Controller.Transposition();
-                Controller.UseBonus(Controller.currentPanel);
-                if (Controller.hitPanel)
-                    Controller.UseBonus(Controller.hitPanel.transform.gameObject);
 
                 Controller.HitMarker(new Vector3(), false);
                 if (Controller.hitPanel)
