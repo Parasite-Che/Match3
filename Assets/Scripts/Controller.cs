@@ -39,7 +39,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         Application.targetFrameRate = 60;
         creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
-        UIbonusBar.transform.parent.gameObject.SetActive(false);
+        //UIbonusBar.transform.parent.gameObject.SetActive(false);
     }
 
     private void Update()

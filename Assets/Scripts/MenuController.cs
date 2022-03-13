@@ -8,12 +8,19 @@ public class MenuController : MonoBehaviour
 {
     public string loadLevel;
     public GameObject LoadingPanel;
+    public GameObject first;
+    public GameObject second;
     public Slider bar;
 
-    public void StartButton(){
-
+    public void LoadSceneButton(){
         LoadingPanel.SetActive(true);
         StartCoroutine(LoadAsync());
+    }
+
+    public void LoadUIButton()
+    {
+        first.SetActive(false);
+        second.SetActive(true);
     }
 
     public void RestartTheApp()
@@ -28,14 +35,11 @@ public class MenuController : MonoBehaviour
 
     IEnumerator LoadAsync()
     {
-        AsyncOperation async = SceneManager.LoadSceneAsync(1);
-        
+        AsyncOperation async = SceneManager.LoadSceneAsync(loadLevel);
         while (!async.isDone)
         {
             bar.value = async.progress;
-            Debug.Log("Load completed");
             yield return null;
         }
-
     }
 }

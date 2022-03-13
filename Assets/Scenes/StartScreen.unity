@@ -249,8 +249,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcbb357088ab5ff4e92fe2d7b32c5572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadLevel: SampleScene
+  loadLevel: MainMenu
   LoadingPanel: {fileID: 1344601732}
+  first: {fileID: 0}
+  second: {fileID: 0}
   bar: {fileID: 179230035}
 --- !u!1 &802408354
 GameObject:
@@ -650,7 +652,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 555351045}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: StartButton
+        m_MethodName: LoadSceneButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
