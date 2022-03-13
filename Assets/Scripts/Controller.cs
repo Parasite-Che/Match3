@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public float ppX;
     public float ppY;
     int countOfScore = 0;
-    int scorePerPanel = 100;
+    int scorePerPanel = 10;
 
     public CreatingPanels creatingPanel;
     public GameObject currentPanel;
@@ -25,14 +26,12 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool hold = false;
     public bool lockDirectX = false;
     public bool lockDirectY = false;
-    bool matchFound = false;
+    public bool matchFound = false;
+    public bool verticalBonus = false;
 
     public Text upgradeTimeUI;
     public float upgradeTimeDecrease;
     public float upgradeTimeMax;
-    float dynamicUpgradeTime = 0;
-    int countOfMatches = 0;
-
     public Vector2 clickPos;
     public RaycastHit2D hitPanel;
 
@@ -40,7 +39,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         Application.targetFrameRate = 60;
         creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
-        UIbonusBar.transform.parent.gameObject.SetActive(false);
+        //UIbonusBar.transform.parent.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -55,20 +54,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 currentPanel.transform.position = new Vector3(ppX, ppY + ((Input.mousePosition.y - clickPos.y) / Screen.height), -1);
             }
-        }
-
-        if (dynamicUpgradeTime > 0)
-        {
-            dynamicUpgradeTime -= upgradeTimeDecrease;
-            UIbonusBar.GetComponent<UIBonusBar>().SetValue(dynamicUpgradeTime / upgradeTimeMax);
-        }
-        else if(dynamicUpgradeTime < 0)
-        {
-            upgradeTimeUI.text = "";
-            dynamicUpgradeTime = 0;
-            countOfMatches = 0;
-            scorePerPanel = 100;
-            UIbonusBar.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -113,7 +98,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 return new Vector3(0, 0);
         }
         else 
-            return new Vector3(1, 1);
+            return new Vector3(0, 0, 1);
     }
 
                                 ///     Hitmarker control     ///
@@ -133,21 +118,174 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void Transposition()
     {
-        if (Direction() == new Vector3(0, 0))
+        if (Direction() == new Vector3(0, 0, 1))
         {
             currentPanel.transform.position = new Vector3(ppX, ppY, 0);
         }
         else
         {
-            if (hitPanel && matchFound)
+            if (hitPanel)
             {
-                currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
-                hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
-                matchFound = false;
+                if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) || (currentPanel.GetComponent<Panels>().ID > 300))
+                {
+
+                    currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
+                    hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                    UseBonus(currentPanel);
+                    UseBonus(hitPanel.transform.gameObject);
+                    matchFound = false;
+
+                }
+                else
+                {
+                    if (matchFound)
+                    {
+                        currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
+                        hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                        matchFound = false;
+                    }
+                    else
+                    {
+                        currentPanel.transform.position = new Vector3(ppX, ppY, 0);
+                    }
+
+                }
             }
             else
             {
                 currentPanel.transform.position = new Vector3(ppX, ppY, 0);
+            }
+        }
+    }
+
+    public void UseBonus(GameObject obj)
+    {
+        if (obj.GetComponent<Panels>().ID > 300)
+        {
+            if (obj.GetComponent<Panels>().bonusName == "CubeBonus")
+            {
+                _ = new BonusControl<CubeBonus>(new CubeBonus(), obj);
+            }
+            else if (obj.GetComponent<Panels>().bonusName == "LineBonus4")
+            {
+                _ = new BonusControl<LineBonus4>(new LineBonus4(), obj);
+            }
+            else if (obj.GetComponent<Panels>().bonusName == "LineBonus5")
+            {
+                _ = new BonusControl<LineBonus5>(new LineBonus5(), obj);
+            }
+            else if (obj.GetComponent<Panels>().bonusName == "LinesOf3Panels")
+            {
+                _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels(), obj);
+            }
+        }
+    }
+
+    private List<GameObject> Line(Vector2 castDir, GameObject obj)
+    {
+        List<GameObject> tiles = new List<GameObject> { obj };
+        RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+        if(hit.collider != null)
+        {
+            hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+        }
+        while (hit.collider != null)
+        {
+            tiles.Add(hit.collider.gameObject);
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            RaycastHit2D hit2 = Physics2D.Raycast(hit.transform.gameObject.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            hit = hit2;
+        }
+        return tiles;
+
+    }
+
+    public void ClearLine(GameObject obj, bool verticalLine)
+    {
+        List<GameObject> tiles;
+        if (verticalLine)
+        {
+            if (Direction() == new Vector3(0, 1))
+            {
+                tiles = Line(Vector2.up, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.down, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else if (Direction() == new Vector3(0, -1))
+            {
+                tiles = Line(Vector2.down, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.up, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else
+            {
+                tiles = Line(Vector2.up, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.down, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+        }
+        else
+        {
+            if (Direction() == new Vector3(1, 0))
+            {
+                tiles = Line(Vector2.right, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.left, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else if (Direction() == new Vector3(-1, 0))
+            {
+                tiles = Line(Vector2.left, currentPanel);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.right, hitPanel.transform.gameObject);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+            else
+            {
+                tiles = Line(Vector2.left, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+                tiles = Line(Vector2.right, obj);
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
             }
         }
     }
@@ -162,17 +300,16 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, obj, obj.transform.position);
             ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, obj, obj.transform.position);
 
-            //ClearMatchOnCub(obj, new Vector3(1, 1, 0), obj.transform.position);
-            //ClearMatchOnCub(obj, new Vector3(-1, 1, 0), obj.transform.position);
-            //ClearMatchOnCub(obj, new Vector3(1, -1, 0), obj.transform.position);
-            //ClearMatchOnCub(obj, new Vector3(-1, -1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(1, 1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(-1, 1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(1, -1, 0), obj.transform.position);
+            ClearMatchOnCub(obj, new Vector3(-1, -1, 0), obj.transform.position);
             obj.GetComponent<BoxCollider2D>().enabled = true;
         }
         else
         {
             if (hitPanel)
             {
-
                 ////        Clear match on Axes         ////
 
                 ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
@@ -198,7 +335,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                             ///      Find Matches and delete sprite     ///
 
     private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
-
     {
         List<GameObject> matchingTiles = new List<GameObject>();
         RaycastHit2D hit = Physics2D.Raycast(secObjPos, castDir, 1f, LayerMask.GetMask("Panel"));
@@ -211,12 +347,10 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             hit = hit2;
         }
         return matchingTiles;
-
     }
 
     void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
     {
-
         List<GameObject> matchingTiles = new List<GameObject> { firstObj };
         for (int i = 0; i < paths.Length; i++)
         {
@@ -224,25 +358,84 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         if (matchingTiles.Count >= 3)
         {
-            for (int i = 0; i < matchingTiles.Count; i++)
+            if (matchingTiles.Count == 3)
             {
-                //Debug.Log(matchingTiles[i]);
-                matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                countOfScore += scorePerPanel;
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += scorePerPanel;
+                }
+            }
+            else if (matchingTiles.Count == 4)
+            {
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += (int)(scorePerPanel * 1.3f);
+                }
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
+                if (matchingTiles[1].transform.position.x - matchingTiles[2].transform.position.x == 0)
+                {
+                    verticalBonus = false;
+                }
+                else
+                {
+                    verticalBonus = true;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += scorePerPanel * 2;
+                }
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_5LineBonus";
             }
             GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
-            dynamicUpgradeTime = upgradeTimeMax;
-            countOfMatches++;
-            UIbonusBar.transform.parent.gameObject.SetActive(true);
-            if (countOfMatches % 2 == 0)
-            {
-                scorePerPanel *= 2;
-                upgradeTimeUI.text = "Bonus X" + (scorePerPanel / 100).ToString();
-            }
             matchFound = true;
         }
     }
 
+    private List<GameObject> AllPanels()
+    {
+        List<GameObject> allObj = new List<GameObject>();
+        for (int i = 0; i < creatingPanel.countOfPanelsOX; i++)
+        {
+            RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(creatingPanel.startPosition.x + i, -creatingPanel.startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
+            for (int j = 0; j < panels.Length; j++)
+            {
+                allObj.Add(panels[j].transform.gameObject);
+            }
+        }
+        return allObj;
+    }
+
+    public List<GameObject> SingeClolorPanels()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> SingeClolorPanels = new List<GameObject>();
+        int ID = -1;
+
+        if(currentPanel.GetComponent<Panels>().ID > 300)
+        {
+            ID = hitPanel.transform.gameObject.GetComponent<Panels>().ID;
+        }
+        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
+        {
+            ID = currentPanel.GetComponent<Panels>().ID;
+        }
+
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (allObj[i].GetComponent<Panels>().ID == ID)
+            {
+                SingeClolorPanels.Add(allObj[i]);
+            } 
+        }
+
+        return SingeClolorPanels;
+    }
 
     void ClearMatchOnCub(GameObject Obj, Vector3 dir, Vector3 objPos)
     {
@@ -259,41 +452,22 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 objList[0].GetComponent<Panels>().ID == objList[2].GetComponent<Panels>().ID &&
                 objList[0].GetComponent<Panels>().ID == objList[3].GetComponent<Panels>().ID)
             {
+                objList[UnityEngine.Random.Range(0, 4)].GetComponent<Panels>().bonusName = "_CubeBonus";
                 for (int i = 0; i < 4; i++)
                 {
                     objList[i].GetComponent<SpriteRenderer>().sprite = null;
-                    countOfScore += scorePerPanel;
-                    
-                }
-                UIbonusBar.transform.parent.gameObject.SetActive(true);
-                dynamicUpgradeTime = upgradeTimeMax;
-                countOfMatches++;
-                if (countOfMatches % 2 == 0)
-                {
-                    scorePerPanel *= 2;
-                    upgradeTimeUI.text = "Bonus X" + (scorePerPanel / 100).ToString();
+                    countOfScore += (int)(scorePerPanel * 1.5f);
                 }
                 matchFound = true;
             }
 
         }
     }
-
-                                ///      Button controllers      ///
-
-    public void RestartTheApp()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void CloseTheApp()
-    {
-        Application.Quit();
-    }
 }
 
 [System.Serializable]
-public struct Panel{
+public struct Panel
+{
     public GameObject obj;
     public int ID;
 }

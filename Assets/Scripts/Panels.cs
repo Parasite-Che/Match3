@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
-using System;
 
 public class Panels : MonoBehaviour
 {
-    Controller Controller;
+    public Controller Controller;
     CreatingPanels creatingPanel;
     public int ID;
     public float falling = 0;
-    
+    public bool deleteOY;
+
+    public string bonusName = "";
     bool topPanels = true;
 
     private void Awake()
@@ -30,13 +30,13 @@ public class Panels : MonoBehaviour
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.15f));
                 falling = 0;
-                //Controller.AllMatches(true, gameObject);
-                creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
-
+                creatingPanel.isFalling = false;
+                Controller.matchFound = false;
             }
         }
         if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
         {
+            creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
             RaycastHit2D[] hits;
             hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
             if (hits != null)
@@ -49,16 +49,33 @@ public class Panels : MonoBehaviour
                         topPanels = false;
                     }
                 }
+                int rand = Random.Range(0, hits.Length);
+                if (bonusName == "_CubeBonus")
+                {
+                    _ = new BonusControl<CubeBonus>(hits[rand].transform.gameObject, new CubeBonus());
+                }
+                else if (bonusName == "_4LineBonus")
+                {
+                    _ = new BonusControl<LineBonus4>(hits[rand].transform.gameObject, new LineBonus4());
+                }
+                else if (bonusName == "_5LineBonus")
+                {
+                    _ = new BonusControl<LineBonus5>(hits[rand].transform.gameObject, new LineBonus5());
+                }
+                else if (bonusName == "_LinesOf3Panels")
+                {
+                    _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
+                }
+
                 if (topPanels)
                 {
                     Destroy(gameObject);
-                    creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
                 }
                 else
                 {
                     Destroy(gameObject);
+                    creatingPanel.isFalling = false;
                 }
-
             }            
         }
     }
@@ -92,16 +109,16 @@ public class Panels : MonoBehaviour
                 if (Controller.hitPanel)
                     Controller.hitPanel.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 
+                
                 Controller.AllMatches(false, null);
                 Controller.Transposition();
+
                 Controller.HitMarker(new Vector3(), false);
-
-
-                Controller.hold = false;
                 if (Controller.hitPanel)
                     Controller.hitPanel.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
                 Controller.currentPanel.GetComponent<BoxCollider2D>().enabled = true;
                 Controller.hitPanel = new RaycastHit2D();
+                Controller.hold = false;
                 Controller.currentPanel = null;
                 Controller.lockDirectX = false;
                 Controller.lockDirectY = false;

@@ -37,6 +37,7 @@ public class CreatingPanels : MonoBehaviour
                     previousAbove[j] = obj.GetComponent<Panels>().ID;
                     previousLeft = obj.GetComponent<Panels>().ID;
                 }
+                
             }
             previousLeft = -1;
             cp.x = startPosition.x;
@@ -55,14 +56,21 @@ public class CreatingPanels : MonoBehaviour
 
     public void FillingInEmptyFields(float posX)
     {
+        int length = 0;
         RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(posX, -startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
-        if (panels.Length < countOfPanelsOY)
+        for (int i = 0; i < panels.Length; i++)
         {
-            for (int i = 0; i < (countOfPanelsOY - panels.Length); i++)
+            if (panels[i].transform.gameObject.GetComponent<SpriteRenderer>().sprite != null)
             {
-               CreatePanel(Random.Range(0, 6), new Vector3(posX, startPosition.y - i, 0));
+                length++;
             }
         }
-        isFalling = false;
+        if (length < countOfPanelsOY)
+        {
+            for (int i = 0; i < (countOfPanelsOY - length); i++)
+            {
+               CreatePanel(Random.Range(0, 6), new Vector3(posX, startPosition.y + i + 1, 0));
+            }
+        }
     }
 }
