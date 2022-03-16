@@ -48,7 +48,7 @@ public class CreatingPanels : MonoBehaviour
 
     public void CreatePanel(int ID, Vector3 pos)
     {
-        GameObject obj = Instantiate<GameObject>(controller.panels[ID].obj, pos, Quaternion.identity);
+        GameObject obj = Instantiate(controller.panels[ID].obj, pos, Quaternion.identity);
         obj.GetComponent<Panels>().ID = ID;
     }
 

@@ -28,6 +28,12 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void ResetAllProgrress()
+    {
+        PlayerPrefs.DeleteAll();
+        LoadSceneButton();
+    }
+
     public void CloseTheApp()
     {
         Application.Quit();

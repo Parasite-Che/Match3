@@ -12,6 +12,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public float ppX;
     public float ppY;
+    public int[] panelGoal;
+    public int countOfMoves;
     int countOfScore = 0;
     int scorePerPanel = 10;
 
@@ -20,6 +22,10 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public GameObject secondPanel;
     public GameObject marker;
     public GameObject UIbonusBar;
+    public GameObject layout;
+    public GameObject loseScreen;
+    public GameObject WinScreen;
+    public GameObject[] goalsList;
     readonly GameObject[] objList = new GameObject[4];
 
 
@@ -30,16 +36,17 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool verticalBonus = false;
 
     public Text upgradeTimeUI;
+    public Text moves;
     public float upgradeTimeDecrease;
     public float upgradeTimeMax;
     public Vector2 clickPos;
     public RaycastHit2D hitPanel;
 
-    private void Start()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
-        //UIbonusBar.transform.parent.gameObject.SetActive(false);
+        CreatingGoal();
     }
 
     private void Update()
@@ -101,6 +108,75 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             return new Vector3(0, 0, 1);
     }
 
+    public void CreatingGoal()
+    {
+        panelGoal = new int[panels.Count];
+        goalsList = new GameObject[panels.Count];
+        //panelGoal[0] = 40;
+        panelGoal[1] = 40; 
+        //panelGoal[2] = 40;
+        //panelGoal[3] = 40;
+        //panelGoal[4] = 40;
+        countOfMoves = 40;
+        int countGoals = 0;
+        moves.text = "Moves: " + countOfMoves.ToString();
+        for (int i = 0; i < panelGoal.Length; i++)
+        {
+            if (panelGoal[i] > 0)
+            {
+                countGoals++;
+            }
+        }
+
+        if(countGoals % 2 == 1)
+        {
+            if (countGoals == 1)
+            {
+                for (int i = 0; i < panelGoal.Length; i++)
+                {       
+                    if (panelGoal[i] > 0)
+                    {
+                        GameObject obj = Instantiate(layout, new Vector3(0, creatingPanel.countOfPanelsOY, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                        obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
+                        obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
+                        goalsList[i] = obj;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                int j = 0;
+                for (int i = 0; i < panelGoal.Length; i++)
+                {
+                    if (panelGoal[i] > 0)
+                    {
+                        GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY , 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                        obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
+                        obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
+                        goalsList[i] = obj;
+                        j++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            int j = 0;
+            for (int i = 0; i < panelGoal.Length; i++)
+            {
+                if (panelGoal[i] > 0)
+                {
+                    GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY , 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                    obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
+                    obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
+                    goalsList[i] = obj;
+                    j++;
+                }
+            }
+        }
+    }
+
                                 ///     Hitmarker control     ///
                                 
     public void HitMarker(Vector3 pos, bool condition)
@@ -128,11 +204,23 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) || (currentPanel.GetComponent<Panels>().ID > 300))
                 {
-
                     currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                     hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
                     UseBonus(currentPanel);
                     UseBonus(hitPanel.transform.gameObject);
+                    countOfMoves--;
+                    moves.text = "Moves: " + countOfMoves.ToString();
+                    if (countOfMoves == 0)
+                    {
+                        loseScreen.SetActive(true);
+                        for (int i = 0; i < goalsList.Length; i++)
+                        {
+                            if (goalsList[i] !=null)
+                            {
+                                Destroy(goalsList[i]);
+                            }
+                        }
+                    }
                     matchFound = false;
 
                 }
@@ -142,6 +230,19 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                     {
                         currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                         hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                        countOfMoves--;
+                        moves.text = "Moves: " + countOfMoves.ToString();
+                        if (countOfMoves == 0)
+                        {
+                            loseScreen.SetActive(true);
+                            for (int i = 0; i < goalsList.Length; i++)
+                            {
+                                if (goalsList[i] != null)
+                                {
+                                    Destroy(goalsList[i]);
+                                }
+                            }
+                        }
                         matchFound = false;
                     }
                     else
@@ -460,7 +561,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 }
                 matchFound = true;
             }
-
         }
     }
 }
