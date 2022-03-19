@@ -68,7 +68,7 @@ public class LineBonus5 : IBonus
     }
     public void BonusEffect(GameObject Obj)
     {
-        List<GameObject> panels = Obj.GetComponent<Panels>().Controller.SingeClolorPanels();
+        List<GameObject> panels = Obj.GetComponent<Panels>().Controller.SingleClolorPanels();
         Obj.GetComponent<SpriteRenderer>().sprite = null;
         for (int i = 0; i < panels.Count; i++)
         {
@@ -87,6 +87,6 @@ public class LinesOf3Panels: IBonus
     }
     public void BonusEffect(GameObject Obj)
     {
-
+        Obj.GetComponent<Panels>().Controller.ClearPanelOnCube(Obj, 5);
     }
 }

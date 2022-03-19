@@ -65,23 +65,23 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1752}
     - Class: 114
-      Script: {instanceID: 2270}
+      Script: {instanceID: 1998}
     - Class: 114
-      Script: {instanceID: 2696}
+      Script: {instanceID: 2272}
     - Class: 114
-      Script: {instanceID: 2862}
+      Script: {instanceID: 2698}
     - Class: 114
-      Script: {instanceID: 3100}
+      Script: {instanceID: 2864}
     - Class: 114
-      Script: {instanceID: 3162}
+      Script: {instanceID: 3102}
     - Class: 114
-      Script: {instanceID: 3356}
+      Script: {instanceID: 3164}
     - Class: 114
-      Script: {instanceID: 3472}
+      Script: {instanceID: 3358}
     - Class: 114
-      Script: {instanceID: 4720}
+      Script: {instanceID: 3474}
     - Class: 114
-      Script: {instanceID: 25878}
+      Script: {instanceID: 4722}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -124,23 +124,23 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1752}
     - Class: 114
-      Script: {instanceID: 2270}
+      Script: {instanceID: 2272}
     - Class: 114
-      Script: {instanceID: 2696}
+      Script: {instanceID: 2698}
     - Class: 114
-      Script: {instanceID: 2862}
+      Script: {instanceID: 2864}
     - Class: 114
-      Script: {instanceID: 3100}
+      Script: {instanceID: 3102}
     - Class: 114
-      Script: {instanceID: 3356}
+      Script: {instanceID: 3358}
     - Class: 114
-      Script: {instanceID: 3472}
+      Script: {instanceID: 3474}
     - Class: 114
-      Script: {instanceID: 3690}
+      Script: {instanceID: 3692}
     - Class: 114
-      Script: {instanceID: 3840}
+      Script: {instanceID: 3842}
     - Class: 114
-      Script: {instanceID: 4696}
+      Script: {instanceID: 4698}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -183,17 +183,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1752}
     - Class: 114
-      Script: {instanceID: 2270}
+      Script: {instanceID: 2272}
     - Class: 114
-      Script: {instanceID: 2696}
+      Script: {instanceID: 2698}
     - Class: 114
-      Script: {instanceID: 2862}
+      Script: {instanceID: 2864}
     - Class: 114
-      Script: {instanceID: 3100}
+      Script: {instanceID: 3102}
     - Class: 114
-      Script: {instanceID: 3356}
+      Script: {instanceID: 3358}
     - Class: 114
-      Script: {instanceID: 3472}
+      Script: {instanceID: 3474}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -313,6 +313,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Notifications.Android.dll
     namespaceName: Unity.Notifications.Android
     className: AndroidReceivedNotificationMainThreadDispatcher
+  - hash:
+      serializedVersion: 2
+      Hash: 0c4dda80177fae77794651bd3365e104
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Authorization
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
@@ -495,7 +501,7 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 5d497c12e49a6bef73a0f52f33a1143b
+      Hash: 3cbdb6ea0b8be134ac21d326126b9144
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Controller
@@ -513,7 +519,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: d186900cb88ea54033052e5db4fa613a
+      Hash: c9ac93e904f2126831407c8411bcce63
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Panels
@@ -769,12 +775,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
-  - hash:
-      serializedVersion: 2
-      Hash: 0c4dda80177fae77794651bd3365e104
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Authorization
   platform: 13
   scenePathNames:
   - Assets/Scenes/StartScreen.unity
