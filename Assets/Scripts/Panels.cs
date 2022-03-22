@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Panels : MonoBehaviour
 {
     public Controller Controller;
     CreatingPanels creatingPanel;
+    public int health;
     public int ID;
     public float falling = 0;
     public bool deleteOY;
@@ -29,55 +31,13 @@ public class Panels : MonoBehaviour
             if (falling < 0)
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.15f));
+                Controller.AllMatches(true, gameObject);
                 falling = 0;
                 creatingPanel.isFalling = false;
                 Controller.matchFound = false;
             }
         }
-        if (gameObject.GetComponent<SpriteRenderer>().sprite == null && falling == 0)
-        {
-            creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
-            RaycastHit2D[] hits;
-            hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
-            if (hits != null)
-            {
-                for (int j = 0; j < hits.Length; j++)
-                {
-                    hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
-                    if (hits[j].transform.GetComponent<SpriteRenderer>().sprite != null)
-                    {
-                        topPanels = false;
-                    }
-                }
-                int rand = Random.Range(0, hits.Length);
-                if (bonusName == "_CubeBonus")
-                {
-                    _ = new BonusControl<CubeBonus>(hits[rand].transform.gameObject, new CubeBonus());
-                }
-                else if (bonusName == "_4LineBonus")
-                {
-                    _ = new BonusControl<LineBonus4>(hits[rand].transform.gameObject, new LineBonus4());
-                }
-                else if (bonusName == "_5LineBonus")
-                {
-                    _ = new BonusControl<LineBonus5>(hits[rand].transform.gameObject, new LineBonus5());
-                }
-                else if (bonusName == "_LinesOf3Panels")
-                {
-                    _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
-                }
-
-                if (topPanels)
-                {
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    Destroy(gameObject);
-                    creatingPanel.isFalling = false;
-                }
-            }            
-        }
+        DeletePanel();
     }
 
     private void OnMouseDown()
@@ -122,6 +82,84 @@ public class Panels : MonoBehaviour
                 Controller.currentPanel = null;
                 Controller.lockDirectX = false;
                 Controller.lockDirectY = false;
+            }
+        }
+    }
+
+    private void DeletePanel()
+    {
+        if (gameObject.GetComponent<SpriteRenderer>().sprite == null)
+        {
+            if (ID < 300)
+            {
+                if (Controller.panelGoal[ID] > 0)
+                {
+                    Controller.panelGoal[ID]--;
+                    Controller.goalsList[ID].transform.GetChild(0).GetComponent<Text>().text = Controller.panelGoal[ID].ToString();
+                    if (Controller.panelGoal[ID] == 0)
+                    {
+                        bool goals = true;
+                        for (int i = 0; i < Controller.panelGoal.Length; i++ )
+                        {
+                            if (Controller.panelGoal[i] > 0)
+                            {
+                                goals = false;
+                            }
+                        }
+                        if (goals)
+                        {
+                            Controller.WinScreen.SetActive(true);
+                            for (int i = 0; i < Controller.goalsList.Length; i++)
+                            {
+                                if (Controller.goalsList[i] != null)
+                                {
+                                    Destroy(Controller.goalsList[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
+            if (hits != null)
+            {
+                for (int j = 0; j < hits.Length; j++)
+                {
+                    hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
+                    if (hits[j].transform.GetComponent<SpriteRenderer>().sprite != null)
+                    {
+                        topPanels = false;
+                    }
+                }
+                int rand = Random.Range(0, hits.Length);
+                if (bonusName == "_CubeBonus")
+                {
+                    _ = new BonusControl<CubeBonus>(hits[rand].transform.gameObject, new CubeBonus());
+                }
+                else if (bonusName == "_4LineBonus")
+                {
+                    _ = new BonusControl<LineBonus4>(hits[rand].transform.gameObject, new LineBonus4());
+                }
+                else if (bonusName == "_5LineBonus")
+                {
+                    _ = new BonusControl<LineBonus5>(hits[rand].transform.gameObject, new LineBonus5());
+                }
+                else if (bonusName == "_LinesOf3Panels")
+                {
+                    _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
+                }
+
+                if (topPanels)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                    creatingPanel.isFalling = false;
+                }
             }
         }
     }

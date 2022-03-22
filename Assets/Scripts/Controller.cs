@@ -12,6 +12,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public float ppX;
     public float ppY;
+    public int[] panelGoal;
+    public int countOfMoves;
     int countOfScore = 0;
     int scorePerPanel = 10;
 
@@ -19,7 +21,10 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public GameObject currentPanel;
     public GameObject secondPanel;
     public GameObject marker;
-    public GameObject UIbonusBar;
+    public GameObject layout;
+    public GameObject loseScreen;
+    public GameObject WinScreen;
+    public GameObject[] goalsList;
     readonly GameObject[] objList = new GameObject[4];
 
 
@@ -29,17 +34,15 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool matchFound = false;
     public bool verticalBonus = false;
 
-    public Text upgradeTimeUI;
-    public float upgradeTimeDecrease;
-    public float upgradeTimeMax;
+    public Text moves;
     public Vector2 clickPos;
     public RaycastHit2D hitPanel;
 
-    private void Start()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
-        //UIbonusBar.transform.parent.gameObject.SetActive(false);
+        CreatingGoal();
     }
 
     private void Update()
@@ -101,6 +104,75 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             return new Vector3(0, 0, 1);
     }
 
+    public void CreatingGoal()
+    {
+        panelGoal = new int[panels.Count];
+        goalsList = new GameObject[panels.Count];
+        //panelGoal[0] = 40;
+        panelGoal[1] = 40; 
+        //panelGoal[2] = 40;
+        //panelGoal[3] = 40;
+        //panelGoal[4] = 40;
+        countOfMoves = 40;
+        int countGoals = 0;
+        moves.text = "Moves: " + countOfMoves.ToString();
+        for (int i = 0; i < panelGoal.Length; i++)
+        {
+            if (panelGoal[i] > 0)
+            {
+                countGoals++;
+            }
+        }
+
+        if(countGoals % 2 == 1)
+        {
+            if (countGoals == 1)
+            {
+                for (int i = 0; i < panelGoal.Length; i++)
+                {       
+                    if (panelGoal[i] > 0)
+                    {
+                        GameObject obj = Instantiate(layout, new Vector3(0, creatingPanel.countOfPanelsOY, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                        obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
+                        obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
+                        goalsList[i] = obj;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                int j = 0;
+                for (int i = 0; i < panelGoal.Length; i++)
+                {
+                    if (panelGoal[i] > 0)
+                    {
+                        GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY , 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                        obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
+                        obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
+                        goalsList[i] = obj;
+                        j++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            int j = 0;
+            for (int i = 0; i < panelGoal.Length; i++)
+            {
+                if (panelGoal[i] > 0)
+                {
+                    GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY , 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                    obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
+                    obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
+                    goalsList[i] = obj;
+                    j++;
+                }
+            }
+        }
+    }
+
                                 ///     Hitmarker control     ///
                                 
     public void HitMarker(Vector3 pos, bool condition)
@@ -128,11 +200,23 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) || (currentPanel.GetComponent<Panels>().ID > 300))
                 {
-
                     currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                     hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
                     UseBonus(currentPanel);
                     UseBonus(hitPanel.transform.gameObject);
+                    countOfMoves--;
+                    moves.text = "Moves: " + countOfMoves.ToString();
+                    if (countOfMoves == 0)
+                    {
+                        loseScreen.SetActive(true);
+                        for (int i = 0; i < goalsList.Length; i++)
+                        {
+                            if (goalsList[i] !=null)
+                            {
+                                Destroy(goalsList[i]);
+                            }
+                        }
+                    }
                     matchFound = false;
 
                 }
@@ -142,6 +226,19 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                     {
                         currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                         hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                        countOfMoves--;
+                        moves.text = "Moves: " + countOfMoves.ToString();
+                        if (countOfMoves == 0)
+                        {
+                            loseScreen.SetActive(true);
+                            for (int i = 0; i < goalsList.Length; i++)
+                            {
+                                if (goalsList[i] != null)
+                                {
+                                    Destroy(goalsList[i]);
+                                }
+                            }
+                        }
                         matchFound = false;
                     }
                     else
@@ -181,24 +278,33 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    private List<GameObject> Line(Vector2 castDir, GameObject obj)
+    public void ClearPanelWithAI()
     {
-        List<GameObject> tiles = new List<GameObject> { obj };
-        RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
-        if(hit.collider != null)
-        {
-            hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
-        }
-        while (hit.collider != null)
-        {
-            tiles.Add(hit.collider.gameObject);
-            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            RaycastHit2D hit2 = Physics2D.Raycast(hit.transform.gameObject.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
-            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-            hit = hit2;
-        }
-        return tiles;
+        
+    }
 
+    public void ClearPanelOnCube(GameObject obj, int width)
+    {
+        List<GameObject> panelList = new List<GameObject>() { currentPanel, hitPanel.transform.gameObject };
+
+        for (int i = 0; i < width; i++)
+        {
+            RaycastHit2D[] panels = Physics2D.RaycastAll(
+                new Vector3(obj.transform.position.x - (width / 2) + i, obj.transform.position.y - (width/2), 0),
+                Vector2.up,
+                width - 1,
+                LayerMask.GetMask("Panel"));
+
+            for (int j = 0; j < panels.Length; j++)
+            {
+                panelList.Add(panels[j].transform.gameObject);
+            }
+        }
+
+        for (int i = 0; i < panelList.Count; i++)
+        {
+            panelList[i].GetComponent<SpriteRenderer>().sprite = null;
+        }
     }
 
     public void ClearLine(GameObject obj, bool verticalLine)
@@ -310,6 +416,18 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             if (hitPanel)
             {
+                ////        Clear match on crossed lines         ////
+
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.left, Vector2.up }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.left, Vector2.down }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.up, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.down, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
+
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.left, Vector2.up }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.left, Vector2.down }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.up, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+                ClearMatchOnCrossedLines(new Vector2[2] { Vector2.down, Vector2.right }, hitPanel.transform.gameObject, new Vector3(ppX, ppY, 0));
+
                 ////        Clear match on Axes         ////
 
                 ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, currentPanel, hitPanel.transform.gameObject.transform.position);
@@ -332,29 +450,33 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-                            ///      Find Matches and delete sprite     ///
-
-    private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
-    {
-        List<GameObject> matchingTiles = new List<GameObject>();
-        RaycastHit2D hit = Physics2D.Raycast(secObjPos, castDir, 1f, LayerMask.GetMask("Panel"));
-        while (hit.collider != null && hit.transform.gameObject.GetComponent<Panels>().ID == firstObj.GetComponent<Panels>().ID)
-        {
-            matchingTiles.Add(hit.collider.gameObject);
-            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            RaycastHit2D hit2 = Physics2D.Raycast(hit.transform.gameObject.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
-            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-            hit = hit2;
-        }
-        return matchingTiles;
-    }
-
-    void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
+    private void ClearMatchOnCrossedLines(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
     {
         List<GameObject> matchingTiles = new List<GameObject> { firstObj };
         for (int i = 0; i < paths.Length; i++)
         {
-            matchingTiles.AddRange(FindMatch(paths[i], firstObj,  secObjPos));
+            matchingTiles.AddRange(FindMatch(paths[i], firstObj, secObjPos));
+        }
+        if (matchingTiles.Count == 5)
+        {
+            for (int i = 0; i < matchingTiles.Count; i++)
+            {
+                matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                countOfScore += (int)(scorePerPanel * 1.7f);
+            }
+            matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_LinesOf3Panels";
+            Debug.Log("Clear Match On Crossed Lines");
+            GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
+            matchFound = true;
+        }
+    }
+
+    private void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
+    {
+        List<GameObject> matchingTiles = new List<GameObject> { firstObj };
+        for (int i = 0; i < paths.Length; i++)
+        {
+            matchingTiles.AddRange(FindMatch(paths[i], firstObj, secObjPos));
         }
         if (matchingTiles.Count >= 3)
         {
@@ -397,47 +519,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    private List<GameObject> AllPanels()
-    {
-        List<GameObject> allObj = new List<GameObject>();
-        for (int i = 0; i < creatingPanel.countOfPanelsOX; i++)
-        {
-            RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(creatingPanel.startPosition.x + i, -creatingPanel.startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
-            for (int j = 0; j < panels.Length; j++)
-            {
-                allObj.Add(panels[j].transform.gameObject);
-            }
-        }
-        return allObj;
-    }
-
-    public List<GameObject> SingeClolorPanels()
-    {
-        List<GameObject> allObj = AllPanels();
-        List<GameObject> SingeClolorPanels = new List<GameObject>();
-        int ID = -1;
-
-        if(currentPanel.GetComponent<Panels>().ID > 300)
-        {
-            ID = hitPanel.transform.gameObject.GetComponent<Panels>().ID;
-        }
-        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
-        {
-            ID = currentPanel.GetComponent<Panels>().ID;
-        }
-
-        for (int i = 0; i < allObj.Count; i++)
-        {
-            if (allObj[i].GetComponent<Panels>().ID == ID)
-            {
-                SingeClolorPanels.Add(allObj[i]);
-            } 
-        }
-
-        return SingeClolorPanels;
-    }
-
-    void ClearMatchOnCub(GameObject Obj, Vector3 dir, Vector3 objPos)
+    private void ClearMatchOnCub(GameObject Obj, Vector3 dir, Vector3 objPos)
     {
         objList[0] = Obj;
         if (Physics2D.Raycast(objPos, dir, 1f, LayerMask.GetMask("Panel")) &&
@@ -460,8 +542,86 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 }
                 matchFound = true;
             }
-
         }
+    }
+
+    private List<GameObject> Line(Vector2 castDir, GameObject obj)
+    {
+        List<GameObject> tiles = new List<GameObject> { obj };
+        RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+        if (hit.collider != null)
+        {
+            hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+        }
+        while (hit.collider != null)
+        {
+            tiles.Add(hit.collider.gameObject);
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            RaycastHit2D hit2 = Physics2D.Raycast(hit.transform.gameObject.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            hit = hit2;
+        }
+        return tiles;
+
+    }
+
+    ///      Find Matches and delete sprite     ///
+
+    private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
+    {
+        List<GameObject> matchingTiles = new List<GameObject>();
+        RaycastHit2D hit = Physics2D.Raycast(secObjPos, castDir, 1f, LayerMask.GetMask("Panel"));
+        while (hit.collider != null && hit.transform.gameObject.GetComponent<Panels>().ID == firstObj.GetComponent<Panels>().ID)
+        {
+            matchingTiles.Add(hit.collider.gameObject);
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            RaycastHit2D hit2 = Physics2D.Raycast(hit.transform.gameObject.transform.position, castDir, 1f, LayerMask.GetMask("Panel"));
+            hit.transform.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            hit = hit2;
+        }
+        return matchingTiles;
+    }
+
+    private List<GameObject> AllPanels()
+    {
+        List<GameObject> allObj = new List<GameObject>();
+        for (int i = 0; i < creatingPanel.countOfPanelsOX; i++)
+        {
+            RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(creatingPanel.startPosition.x + i, -creatingPanel.startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
+            for (int j = 0; j < panels.Length; j++)
+            {
+                allObj.Add(panels[j].transform.gameObject);
+            }
+        }
+        return allObj;
+    }
+
+    public List<GameObject> SingleClolorPanels()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> SingeClolorPanels = new List<GameObject>();
+        int ID = -1;
+
+        if (currentPanel.GetComponent<Panels>().ID > 300)
+        {
+            ID = hitPanel.transform.gameObject.GetComponent<Panels>().ID;
+            allObj.Add(hitPanel.transform.gameObject);
+        }
+        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
+        {
+            ID = currentPanel.GetComponent<Panels>().ID;
+            allObj.Add(hitPanel.transform.gameObject);
+        }
+
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (allObj[i].GetComponent<Panels>().ID == ID)
+            {
+                SingeClolorPanels.Add(allObj[i]);
+            }
+        }
+
+        return SingeClolorPanels;
     }
 }
 
