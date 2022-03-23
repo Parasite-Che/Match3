@@ -10,7 +10,6 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
-    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
@@ -501,7 +500,7 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 3cbdb6ea0b8be134ac21d326126b9144
+      Hash: 0cda581459592772c0765be0689e6e9b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Controller
@@ -657,7 +656,7 @@ ScriptsOnlyBuild:
     className: TMP_ColorGradient
   - hash:
       serializedVersion: 2
-      Hash: 79d86607aeaf822d1e7fb27a71f3a0a4
+      Hash: a83457f5624c9f749c87ed97c83431e1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CreatingPanels

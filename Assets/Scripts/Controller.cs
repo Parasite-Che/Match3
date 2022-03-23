@@ -14,7 +14,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public float ppY;
     public int[] panelGoal;
     public int countOfMoves;
-    int countOfScore = 0;
+    public int countOfScore = 0;
     int scorePerPanel = 10;
 
     public CreatingPanels creatingPanel;
@@ -22,6 +22,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public GameObject secondPanel;
     public GameObject marker;
     public GameObject layout;
+    public GameObject field;
     public GameObject loseScreen;
     public GameObject WinScreen;
     public GameObject[] goalsList;
@@ -34,6 +35,8 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool matchFound = false;
     public bool verticalBonus = false;
 
+    public Text winText;
+    public Text loseText;
     public Text moves;
     public Vector2 clickPos;
     public RaycastHit2D hitPanel;
@@ -111,7 +114,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         //panelGoal[0] = 40;
         panelGoal[1] = 40; 
         //panelGoal[2] = 40;
-        //panelGoal[3] = 40;
+        panelGoal[3] = 40;
         //panelGoal[4] = 40;
         countOfMoves = 40;
         int countGoals = 0;
@@ -206,17 +209,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                     UseBonus(hitPanel.transform.gameObject);
                     countOfMoves--;
                     moves.text = "Moves: " + countOfMoves.ToString();
-                    if (countOfMoves == 0)
-                    {
-                        loseScreen.SetActive(true);
-                        for (int i = 0; i < goalsList.Length; i++)
-                        {
-                            if (goalsList[i] !=null)
-                            {
-                                Destroy(goalsList[i]);
-                            }
-                        }
-                    }
+                    LosingControl();
                     matchFound = false;
 
                 }
@@ -228,17 +221,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                         hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
                         countOfMoves--;
                         moves.text = "Moves: " + countOfMoves.ToString();
-                        if (countOfMoves == 0)
-                        {
-                            loseScreen.SetActive(true);
-                            for (int i = 0; i < goalsList.Length; i++)
-                            {
-                                if (goalsList[i] != null)
-                                {
-                                    Destroy(goalsList[i]);
-                                }
-                            }
-                        }
+                        LosingControl();
                         matchFound = false;
                     }
                     else
@@ -251,6 +234,32 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             else
             {
                 currentPanel.transform.position = new Vector3(ppX, ppY, 0);
+            }
+        }
+    }
+
+    public void LosingControl()
+    {
+        bool goals = true;
+        for (int i = 0; i < panelGoal.Length; i++)
+        {
+            if (panelGoal[i] > 0)
+            {
+                goals = false;
+                break;
+            }
+        }
+        if (countOfMoves == 0 && !goals)
+        {
+            field.SetActive(false);
+            loseScreen.SetActive(true);
+            loseText.text = "You lose!\nYour Score: " + countOfScore.ToString();
+            for (int i = 0; i < goalsList.Length; i++)
+            {
+                if (goalsList[i] != null)
+                {
+                    Destroy(goalsList[i]);
+                }
             }
         }
     }
@@ -280,7 +289,35 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void ClearPanelWithAI()
     {
-        
+        /*
+        List<GameObject> allObj = AllPanels();
+        int max = 0;
+        int id = -1;
+        for (int i = 0; i < panelGoal.Length; i++)
+        {
+            if (panelGoal[i] > max)
+            {
+                max = panelGoal[i];
+                id = i;
+            }
+        }
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (allObj[i].GetComponent<Panels>().ID == id)
+            {
+                allObj[i].GetComponent<SpriteRenderer>().sprite = null;
+            }
+        }
+        if(currentPanel.GetComponent<Panels>().ID == 301 || currentPanel.GetComponent<Panels>().ID == id)
+        {
+            currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+        }
+        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301 || hitPanel.transform.gameObject.GetComponent<Panels>().ID == id)
+        {
+            hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+        }
+
+        */
     }
 
     public void ClearPanelOnCube(GameObject obj, int width)
@@ -620,7 +657,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 SingeClolorPanels.Add(allObj[i]);
             }
         }
-
         return SingeClolorPanels;
     }
 }

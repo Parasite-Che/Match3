@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CreatingPanels : MonoBehaviour
 {
+    public GameObject field;
     public Controller controller;
+
     public bool isFalling = false;
 
     public int countOfPanelsOX;
@@ -32,23 +34,22 @@ public class CreatingPanels : MonoBehaviour
 
                 if (rand != -1)
                 {
-                    GameObject obj = Instantiate(controller.panels[rand].obj, new Vector3(cp.x + j, cp.y - i, 0), Quaternion.identity);
+                    GameObject obj = Instantiate(controller.panels[rand].obj, new Vector3(cp.x + j, cp.y - i, 0), Quaternion.identity, field.transform);
                     obj.GetComponent<Panels>().ID = rand;
                     previousAbove[j] = obj.GetComponent<Panels>().ID;
                     previousLeft = obj.GetComponent<Panels>().ID;
                 }
-                
             }
             previousLeft = -1;
             cp.x = startPosition.x;
         }
     }
 
-    ///     creating a panel at a specific point      ///
+    ///     creating a panel at a specific point     ///
 
     public void CreatePanel(int ID, Vector3 pos)
     {
-        GameObject obj = Instantiate(controller.panels[ID].obj, pos, Quaternion.identity);
+        GameObject obj = Instantiate(controller.panels[ID].obj, pos, Quaternion.identity, field.transform);
         obj.GetComponent<Panels>().ID = ID;
     }
 

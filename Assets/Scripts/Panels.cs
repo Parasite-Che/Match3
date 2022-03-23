@@ -7,6 +7,7 @@ public class Panels : MonoBehaviour
 {
     public Controller Controller;
     CreatingPanels creatingPanel;
+
     public int health;
     public int ID;
     public float falling = 0;
@@ -104,11 +105,14 @@ public class Panels : MonoBehaviour
                             if (Controller.panelGoal[i] > 0)
                             {
                                 goals = false;
+                                break;
                             }
                         }
                         if (goals)
                         {
+                            Controller.field.SetActive(false);
                             Controller.WinScreen.SetActive(true);
+                            Controller.winText.text = "Great!\nYour Score: " + Controller.countOfScore.ToString();
                             for (int i = 0; i < Controller.goalsList.Length; i++)
                             {
                                 if (Controller.goalsList[i] != null)
