@@ -32,7 +32,7 @@ public class CubeBonus : IBonus
     }
     public void BonusEffect(GameObject Obj)
     {
-        //Obj.GetComponent<Panels>().Controller.ClearPanelWithAI();
+        Obj.GetComponent<Panels>().Controller.ClearPanelWithAI(Obj);
     }
 }
 

@@ -287,37 +287,59 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void ClearPanelWithAI()
+    void ClearPanelONDirect(GameObject obj, Vector3 dir)
     {
-        /*
-        List<GameObject> allObj = AllPanels();
-        int max = 0;
-        int id = -1;
-        for (int i = 0; i < panelGoal.Length; i++)
+        if(Physics2D.Raycast(new Vector3(obj.transform.position.x, obj.transform.position.y, 0), dir, 1f, LayerMask.GetMask("Panel")))
+            Physics2D.Raycast(new Vector3(obj.transform.position.x, obj.transform.position.y, 0), dir, 1f, LayerMask.GetMask("Panel")).transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    public void ClearPanelWithAI(GameObject obj)
+    {
+        int minus = 1;
+        if(obj == currentPanel)
         {
-            if (panelGoal[i] > max)
-            {
-                max = panelGoal[i];
-                id = i;
-            }
+            hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+            minus = -1;
         }
-        for (int i = 0; i < allObj.Count; i++)
-        {
-            if (allObj[i].GetComponent<Panels>().ID == id)
-            {
-                allObj[i].GetComponent<SpriteRenderer>().sprite = null;
-            }
-        }
-        if(currentPanel.GetComponent<Panels>().ID == 301 || currentPanel.GetComponent<Panels>().ID == id)
+        else
         {
             currentPanel.GetComponent<SpriteRenderer>().sprite = null;
         }
-        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301 || hitPanel.transform.gameObject.GetComponent<Panels>().ID == id)
-        {
-            hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
-        }
 
-        */
+        obj.GetComponent<BoxCollider2D>().enabled = false;
+        if (Direction() == new Vector3(0, 1))
+        {
+            ClearPanelONDirect(obj, new Vector3(1, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(-1, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(0, -1 * minus, 0));
+        }
+        else if (Direction() == new Vector3(0, -1))
+        {
+            ClearPanelONDirect(obj, new Vector3(1, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(-1, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(0, 1 * minus, 0));
+        }
+        else if (Direction() == new Vector3(1, 0))
+        {
+            ClearPanelONDirect(obj, new Vector3(-1 * minus, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(0, -1, 0));
+            ClearPanelONDirect(obj, new Vector3(0, 1, 0));
+        }
+        else if (Direction() == new Vector3(-1, 0))
+        {
+            ClearPanelONDirect(obj, new Vector3(1 * minus, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(0, -1, 0));
+            ClearPanelONDirect(obj, new Vector3(0, 1, 0));
+        }
+        else if (Direction() == new Vector3(0, 0, 1))
+        {
+            ClearPanelONDirect(obj, new Vector3(-1, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(1, 0, 0));
+            ClearPanelONDirect(obj, new Vector3(0, -1, 0));
+            ClearPanelONDirect(obj, new Vector3(0, 1, 0));
+        }
+        obj.GetComponent<BoxCollider2D>().enabled = true;
+        obj.GetComponent<SpriteRenderer>().sprite = null;
     }
 
     public void ClearPanelOnCube(GameObject obj, int width)

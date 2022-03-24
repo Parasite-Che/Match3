@@ -26,12 +26,12 @@ public class Panels : MonoBehaviour
     {
         if (falling > 0)
         {
-            transform.position += new Vector3(0, -0.1f, 0);
-            falling -= 0.1f;
+            transform.position += new Vector3(0, -0.15f, 0);
+            falling -= 0.15f;
             creatingPanel.isFalling = true;
             if (falling < 0)
             {
-                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.15f));
+                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.31f));
                 Controller.AllMatches(true, gameObject);
                 falling = 0;
                 creatingPanel.isFalling = false;

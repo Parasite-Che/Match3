@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Build Settings
+  m_Title: Scene
   m_RootView: {fileID: 9}
   m_MinSize: {x: 875, y: 922}
   m_MaxSize: {x: 10000, y: 10000}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_MinSize: {x: 435, y: 271}
   m_MaxSize: {x: 18005, y: 10021}
   vertical: 0
-  controlID: 192
+  controlID: 190
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -123,10 +123,10 @@ MonoBehaviour:
     y: 30
     width: 1536
     height: 723
-  m_MinSize: {x: 1109, y: 872}
+  m_MinSize: {x: 711, y: 492}
   m_MaxSize: {x: 22006, y: 14042}
   vertical: 0
-  controlID: 186
+  controlID: 260
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -300,10 +300,10 @@ MonoBehaviour:
     y: 0
     width: 1095
     height: 723
-  m_MinSize: {x: 833, y: 872}
+  m_MinSize: {x: 435, y: 492}
   m_MaxSize: {x: 18005, y: 14042}
   vertical: 1
-  controlID: 191
+  controlID: 24
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -325,10 +325,10 @@ MonoBehaviour:
     y: 0
     width: 1095
     height: 498.4
-  m_MinSize: {x: 833, y: 601}
+  m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 78
+  controlID: 25
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: BuildPlayerWindow
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -348,16 +348,16 @@ MonoBehaviour:
     y: 0
     width: 774.2
     height: 498.4
-  m_MinSize: {x: 632, y: 601}
+  m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 18}
+  m_ActualView: {fileID: 22}
   m_Panes:
   - {fileID: 22}
   - {fileID: 17}
   - {fileID: 18}
   - {fileID: 15}
-  m_Selected: 2
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 2
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -590,7 +590,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs/Panels
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 0
@@ -604,7 +604,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: d8420000
     m_LastClickedID: 17112
-    m_ExpandedIDs: 000000009443000096430000984300009a430000
+    m_ExpandedIDs: 000000009443000096430000984300009a4300009c430000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -632,7 +632,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000009443000096430000984300009a430000d6430000
+    m_ExpandedIDs: ffffffff000000009443000096430000984300009a430000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -755,7 +755,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: c8e5ffffdee5ffffd2e6ffff10e7ffff18e7ffff40fbffff
+      m_ExpandedIDs: 8a9effffa09effff949fffffd29fffffda9fffff64a0ffffa8a0ffffa0dbffff40fbffff7c620000a6620000b2620000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -802,7 +802,7 @@ MonoBehaviour:
     x: 320.80002
     y: 73.6
     width: 772.2
-    height: 199.8
+    height: 477.4
   m_ViewDataDictionary: {fileID: 0}
   m_ShowContextualTools: 0
   m_WindowGUID: cc27987af1a868c49b0894db9c0f5429
