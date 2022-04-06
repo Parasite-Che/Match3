@@ -201,12 +201,22 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             if (hitPanel)
             {
-                if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) || (currentPanel.GetComponent<Panels>().ID > 300))
+                if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) && (currentPanel.GetComponent<Panels>().ID > 300))
                 {
                     currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
                     hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
-                    UseBonus(currentPanel);
-                    UseBonus(hitPanel.transform.gameObject);
+                    UsingDoubleBonus();
+                    countOfMoves--;
+                    moves.text = "Moves: " + countOfMoves.ToString();
+                    LosingControl();
+                    matchFound = false;
+                }
+                else if ((hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300) || (currentPanel.GetComponent<Panels>().ID > 300))
+                {
+                    currentPanel.transform.position = hitPanel.transform.gameObject.transform.position;
+                    hitPanel.transform.gameObject.transform.position = new Vector3(ppX, ppY, 0);
+                    UsingBonus(currentPanel);
+                    UsingBonus(hitPanel.transform.gameObject);
                     countOfMoves--;
                     moves.text = "Moves: " + countOfMoves.ToString();
                     LosingControl();
@@ -264,7 +274,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void UseBonus(GameObject obj)
+    void UsingBonus(GameObject obj)
     {
         if (obj.GetComponent<Panels>().ID > 300)
         {
@@ -283,6 +293,54 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             else if (obj.GetComponent<Panels>().bonusName == "LinesOf3Panels")
             {
                 _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels(), obj);
+            }
+        }
+    }
+
+    void UsingDoubleBonus()
+    {
+        if(currentPanel.GetComponent<Panels>().bonusName == "LineBonus4" || hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "LineBonus4")
+        {
+            if (currentPanel.GetComponent<Panels>().bonusName == "LineBonus4")
+            {
+                _ = new BonusControl<LineBonus4>(new LineBonus4(), currentPanel);
+            }
+            else if (hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "LineBonus4")
+            {
+                _ = new BonusControl<LineBonus4>(new LineBonus4(), hitPanel.transform.gameObject);
+            }
+        }
+        else if (currentPanel.GetComponent<Panels>().bonusName == "CubeBonus" || hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "CubeBonus")
+        {
+            if (currentPanel.GetComponent<Panels>().bonusName == "CubeBonus")
+            {
+                _ = new BonusControl<CubeBonus>(new CubeBonus(), currentPanel);
+            }
+            else if (hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "CubeBonus")
+            {
+                _ = new BonusControl<CubeBonus>(new CubeBonus(), hitPanel.transform.gameObject);
+            }
+        }
+        else if (currentPanel.GetComponent<Panels>().bonusName == "LinesOf3Panels" || hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "LinesOf3Panels")
+        {
+            if (currentPanel.GetComponent<Panels>().bonusName == "LinesOf3Panels")
+            {
+                _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels(), currentPanel);
+            }
+            else if (hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "LinesOf3Panels")
+            {
+                _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels(), hitPanel.transform.gameObject);
+            }
+        }
+        else if (currentPanel.GetComponent<Panels>().bonusName == "LineBonus5" || hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "LineBonus5")
+        {
+            if (currentPanel.GetComponent<Panels>().bonusName == "LineBonus5")
+            {
+                _ = new BonusControl<LineBonus5>(new LineBonus5(), currentPanel);
+            }
+            else if (hitPanel.transform.gameObject.GetComponent<Panels>().bonusName == "LineBonus5")
+            {
+                _ = new BonusControl<LineBonus5>(new LineBonus5(), hitPanel.transform.gameObject);
             }
         }
     }

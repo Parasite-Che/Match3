@@ -12,6 +12,12 @@
             "deviceId": "09d80eb10805",
             "name": "com.android.launcher3",
             "processId": 3661,
+            "exited": true
+        },
+        {
+            "deviceId": "09d80eb10805",
+            "name": "com.android.launcher3",
+            "processId": 27196,
             "exited": false
         }
     ],

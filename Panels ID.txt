@@ -8,7 +8,7 @@ ID   :   Panel
 5    :   Pink
      :
 
-301  :   Cube
-302  :   Line of 4 Panels
-303  :   Line of 4 Panels
-304  :   2 Lines of 3 Panels
+301  :   LineBonus4
+302  :   CubeBonus
+303  :   LinesOf3Panels
+304  :   LineBonus5
