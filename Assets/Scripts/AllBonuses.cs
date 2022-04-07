@@ -46,7 +46,7 @@ public class LineBonus4 : IBonus
                  (controller.currentPanel.GetComponent<Panels>().ID == 302 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
         {
-
+             
         }
         else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303) ||
