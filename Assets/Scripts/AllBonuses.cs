@@ -9,7 +9,7 @@ public class BonusControl<T> where T : IBonus
         value.BonusEffect(obj);
     }
 
-    public BonusControl(GameObject gameObject, T value)
+    public BonusControl(GameObject gameObject, T value) 
     {
         value.GivingBonus(gameObject);
     }
@@ -82,7 +82,7 @@ public class LineBonus4 : IBonus
                  (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
         {
-
+            controller.FillingBonuses4();
         }
         else
         {
@@ -160,7 +160,7 @@ public class LinesOf3Panels : IBonus
         if (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
         controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303)
         {
-
+            controller.ClearPanelOnCube(Obj, 8);
         }
         else if ((controller.currentPanel.GetComponent<Panels>().ID == 303 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
@@ -169,8 +169,7 @@ public class LinesOf3Panels : IBonus
         {
 
         }
-        else if (controller.currentPanel.GetComponent<Panels>().ID < 300 &&
-                controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID > 303)
+        else 
         {
             controller.ClearPanelOnCube(Obj, 5);
         }
@@ -193,7 +192,7 @@ public class LineBonus5 : IBonus
         if (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
             controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304)
         {
-
+            controller.DestroyAll();
         }
         else 
         {

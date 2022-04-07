@@ -176,8 +176,109 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    public void ThreeRandomBonuses()
+    {
+        GameObject[] bonuses = new GameObject[3];
+        List<GameObject> allObj = AllPanels();
+        GameObject obj = new GameObject();
+        int rand = -1;
+        for (int i = 0; i < bonuses.Length; i++)
+        {
+            rand = UnityEngine.Random.Range(1, 5);
+            obj = allObj[UnityEngine.Random.Range(0, allObj.Count)];
+            if (obj != bonuses[0] && obj != bonuses[1] && obj != bonuses[2])
+            {
+                switch(rand)
+                {
+                    case 1:
+                        _ = new BonusControl<LineBonus4>(obj, new LineBonus4());
+                        break;
+                    case 2:
+                        _ = new BonusControl<CubeBonus>(obj, new CubeBonus());
+                        break;
+                    case 3:
+                        _ = new BonusControl<LinesOf3Panels>(obj, new LinesOf3Panels());
+                        break;
+                    case 4:
+                        _ = new BonusControl<LineBonus5>(obj, new LineBonus5());
+                        break;
+                }
+            }
+            else
+            {
+                i--;
+            }
+        }
+
+        for (int i = 0; i < bonuses.Length; i++)
+        {
+            switch (bonuses[i].GetComponent<Panels>().ID)
+            {
+                case 301:
+                    _ = new BonusControl<LineBonus4>(obj, new LineBonus4());
+                    break;
+                case 302:
+                    _ = new BonusControl<CubeBonus>(obj, new CubeBonus());
+                    break;
+                case 303:
+                    _ = new BonusControl<LinesOf3Panels>(obj, new LinesOf3Panels());
+                    break;
+                case 304:
+                    _ = new BonusControl<LineBonus5>(obj, new LineBonus5());
+                    break;
+            }
+        }
+
+        currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+        hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    public void FillingBonuses4()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> bonuses = new List<GameObject>();
+        int countOfBonuses = 0;
+        int maxBonuses = (int)(creatingPanel.countOfPanelsOX * creatingPanel.countOfPanelsOY * 0.4f);
+        Debug.Log(maxBonuses);
+        int rand = -1;
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (countOfBonuses < maxBonuses)
+            {
+                rand = UnityEngine.Random.Range(1, 11);
+                if (rand <= 4)
+                {
+                    _ = new BonusControl<LineBonus4>(allObj[i], new LineBonus4());
+                    allObj[i].GetComponent<Panels>().deleteOY = UnityEngine.Random.Range(1, 3) == 1;
+                    countOfBonuses++;
+                    Debug.Log(countOfBonuses);
+                    bonuses.Add(allObj[i]);
+                }
+            }
+            else break;
+        }
+        /*
+        for (int i = 0; i < bonuses.Count; i++)
+        {
+            _ = new BonusControl<LineBonus4>(new LineBonus4(), bonuses[i]);
+        }*/
+        currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+        hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    public void DestroyAll()
+    {
+        List<GameObject> allObj = AllPanels();
+        allObj.Add(currentPanel);
+        allObj.Add(hitPanel.transform.gameObject);
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            allObj[i].GetComponent<SpriteRenderer>().sprite = null;
+        }
+    }
+
                                 ///     Hitmarker control     ///
-                                
+
     public void HitMarker(Vector3 pos, bool condition)
     {
         if (pos != null)
@@ -407,7 +508,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         for (int i = 0; i < width; i++)
         {
             RaycastHit2D[] panels = Physics2D.RaycastAll(
-                new Vector3(obj.transform.position.x - (width / 2) + i, obj.transform.position.y - (width/2), 0),
+                new Vector3(obj.transform.position.x - (width / 2) + i, obj.transform.position.y - (width / 2), 0),
                 Vector2.up,
                 width - 1,
                 LayerMask.GetMask("Panel"));
