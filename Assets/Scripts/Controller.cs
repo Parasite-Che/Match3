@@ -181,7 +181,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         GameObject[] bonuses = new GameObject[3];
         List<GameObject> allObj = AllPanels();
         GameObject obj = new GameObject();
-        int rand = -1;
+        int rand;
         for (int i = 0; i < bonuses.Length; i++)
         {
             rand = UnityEngine.Random.Range(1, 5);
@@ -203,6 +203,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                         _ = new BonusControl<LineBonus5>(obj, new LineBonus5());
                         break;
                 }
+                bonuses[i] = obj;
             }
             else
             {
@@ -212,20 +213,23 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         for (int i = 0; i < bonuses.Length; i++)
         {
-            switch (bonuses[i].GetComponent<Panels>().ID)
+            if (bonuses[i])
             {
-                case 301:
-                    _ = new BonusControl<LineBonus4>(obj, new LineBonus4());
-                    break;
-                case 302:
-                    _ = new BonusControl<CubeBonus>(obj, new CubeBonus());
-                    break;
-                case 303:
-                    _ = new BonusControl<LinesOf3Panels>(obj, new LinesOf3Panels());
-                    break;
-                case 304:
-                    _ = new BonusControl<LineBonus5>(obj, new LineBonus5());
-                    break;
+                switch (bonuses[i].GetComponent<Panels>().ID)
+                {
+                    case 301:
+                        _ = new BonusControl<LineBonus4>(new LineBonus4(), obj);
+                        break;
+                    case 302:
+                        _ = new BonusControl<CubeBonus>(new CubeBonus(), obj);
+                        break;
+                    case 303:
+                        _ = new BonusControl<LinesOf3Panels>(new LinesOf3Panels(), obj);
+                        break;
+                    case 304:
+                        _ = new BonusControl<LineBonus5>(new LineBonus5(), obj);
+                        break;
+                }
             }
         }
 
@@ -233,14 +237,14 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
     }
 
-    public void FillingBonuses4()
+    public void FillingBonuses301()
     {
         List<GameObject> allObj = AllPanels();
         List<GameObject> bonuses = new List<GameObject>();
         int countOfBonuses = 0;
         int maxBonuses = (int)(creatingPanel.countOfPanelsOX * creatingPanel.countOfPanelsOY * 0.4f);
         Debug.Log(maxBonuses);
-        int rand = -1;
+        int rand;
         for (int i = 0; i < allObj.Count; i++)
         {
             if (countOfBonuses < maxBonuses)
@@ -260,8 +264,71 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         /*
         for (int i = 0; i < bonuses.Count; i++)
         {
-            _ = new BonusControl<LineBonus4>(new LineBonus4(), bonuses[i]);
+            if(bonuses[i] != null)
+                _ = new BonusControl<LineBonus4>(new LineBonus4(), bonuses[i]);
         }*/
+        currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+        hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    public void FillingBonuses302()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> bonuses = new List<GameObject>();
+        int countOfBonuses = 0;
+        int maxBonuses = (int)(creatingPanel.countOfPanelsOX * creatingPanel.countOfPanelsOY * 0.3f);
+        Debug.Log(maxBonuses);
+        int rand;
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (countOfBonuses < maxBonuses)
+            {
+                rand = UnityEngine.Random.Range(1, 11);
+                if (rand <= 3)
+                {
+                    _ = new BonusControl<CubeBonus>(allObj[i], new CubeBonus());
+                    allObj[i].GetComponent<Panels>().deleteOY = UnityEngine.Random.Range(1, 3) == 1;
+                    countOfBonuses++;
+                    Debug.Log(countOfBonuses);
+                    bonuses.Add(allObj[i]);
+                }
+            }
+            else break;
+        }
+        /*
+        for (int i = 0; i < bonuses.Count; i++)
+        {
+            if(bonuses[i] != null)
+                _ = new BonusControl<CubeBonus>(new CubeBonus(), bonuses[i]);
+        }*/
+        currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+        hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    public void FillingBonuses303()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> bonuses = new List<GameObject>();
+        int countOfBonuses = 0;
+        int maxBonuses = (int)(creatingPanel.countOfPanelsOX * creatingPanel.countOfPanelsOY * 0.2f);
+        Debug.Log(maxBonuses);
+        int rand;
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (countOfBonuses < maxBonuses)
+            {
+                rand = UnityEngine.Random.Range(1, 11);
+                if (rand <= 2)
+                {
+                    _ = new BonusControl<LinesOf3Panels>(allObj[i], new LinesOf3Panels());
+                    allObj[i].GetComponent<Panels>().deleteOY = UnityEngine.Random.Range(1, 3) == 1;
+                    countOfBonuses++;
+                    Debug.Log(countOfBonuses);
+                    bonuses.Add(allObj[i]);
+                }
+            }
+            else break;
+        }
         currentPanel.GetComponent<SpriteRenderer>().sprite = null;
         hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
     }
@@ -527,9 +594,25 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void ClearLine(GameObject obj, bool verticalLine)
     {
-        List<GameObject> tiles;
+        List<GameObject> tiles = new List<GameObject>();
         if (verticalLine)
         {
+            RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(obj.transform.position.x, -creatingPanel.startPosition.y, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
+            for (int i = 0; i < panels.Length; i++)
+            {
+                tiles.Add(panels[i].transform.gameObject);
+            }
+            if (Direction() == new Vector3(0, 1) || Direction() == new Vector3(0, -1))
+            {
+                if (obj == currentPanel)
+                {
+                    tiles.Add(hitPanel.transform.gameObject);
+                }
+                else
+                    tiles.Add(currentPanel);
+            }
+
+            /*
             if (Direction() == new Vector3(0, 1))
             {
                 tiles = Line(Vector2.up, currentPanel);
@@ -569,9 +652,26 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                     tiles[i].GetComponent<SpriteRenderer>().sprite = null;
                 }
             }
+            */
         }
         else
         {
+            RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(creatingPanel.startPosition.x, obj.transform.position.y, 0), Vector2.right, 100f, LayerMask.GetMask("Panel"));
+            for (int i = 0; i < panels.Length; i++)
+            {
+                tiles.Add(panels[i].transform.gameObject);
+            }
+            if (Direction() == new Vector3(1, 0) || Direction() == new Vector3(-1, 0))
+            {
+                if (obj == currentPanel)
+                {
+                    tiles.Add(hitPanel.transform.gameObject);
+                }
+                else
+                    tiles.Add(currentPanel);
+            }
+
+            /*
             if (Direction() == new Vector3(1, 0))
             {
                 tiles = Line(Vector2.right, currentPanel);
@@ -611,7 +711,13 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                     tiles[i].GetComponent<SpriteRenderer>().sprite = null;
                 }
             }
+            */
         }
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+        }
+        obj.GetComponent<SpriteRenderer>().sprite = null;
     }
 
                                 ///     General method for finding matches     ///
