@@ -46,7 +46,7 @@ public class LineBonus4 : IBonus
                  (controller.currentPanel.GetComponent<Panels>().ID == 302 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
         {
-             
+            controller.ClearLineWithAI();
         }
         else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303) ||
@@ -82,7 +82,7 @@ public class LineBonus4 : IBonus
                  (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
         {
-            controller.FillingBonuses301();
+            controller.FillingBonuses301(20);
         }
         else
         {
@@ -130,12 +130,12 @@ public class CubeBonus : IBonus
                  (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302))
         {
-            controller.FillingBonuses302();
+            controller.FillingBonuses302(20);
         }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID < 300 ||
+        else /*if ((controller.currentPanel.GetComponent<Panels>().ID < 300 ||
                 controller.currentPanel.GetComponent<Panels>().ID > 302) ||
                 (controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID < 300 ||
-                controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID > 302))
+                controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID > 302))*/
         {
 
             controller.ClearPanelWithAI(Obj);
@@ -167,7 +167,7 @@ public class LinesOf3Panels : IBonus
                  (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
                  controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303))
         {
-            controller.FillingBonuses303();
+            controller.FillingBonuses303(20);
         }
         else 
         {
