@@ -176,9 +176,60 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void DeployingTheBombWithAI()
+    public void DeployingTheBombWithAI(int width)
     {
+        int countOfPanels = 0;
+        int max = 0;
+        int id = -1;
+        GameObject centre = new GameObject();
+        GameObject curentCentre = new GameObject();
 
+        for (int i = 0; i < panelGoal.Length; i++)
+        {
+            if (panelGoal[i] > max)
+            {
+                max = panelGoal[i];
+                id = i;
+            }
+        }
+        max = 0;
+
+        for (int i = 0; i < creatingPanel.countOfPanelsOY - width; i++)
+        {
+            for (int j = 0; j < creatingPanel.countOfPanelsOX - width; j++)
+            {
+                for (int k = 0; k < width; k++)
+                {
+                    RaycastHit2D[] panels = Physics2D.RaycastAll(
+                                                        new Vector3(creatingPanel.startPosition.x + j + k, creatingPanel.startPosition.y - width - i, 0),
+                                                        Vector2.up,
+                                                        width - 1,
+                                                        LayerMask.GetMask("Panel"));
+                    if (k == 2)
+                    {
+                        centre = panels[2].transform.gameObject;
+                    }
+                    for (int l = 0; l < panels.Length; l++) 
+                    {
+                        if (panels[l].transform.gameObject.GetComponent<Panels>().ID == id)
+                        {
+                            countOfPanels++;
+                        }
+                    }
+
+                }
+                if (countOfPanels > max)
+                {
+                    max = countOfPanels;
+                    curentCentre = centre;
+                }
+                countOfPanels = 0;
+            }
+        }
+        _ = new BonusControl<LinesOf3Panels>(curentCentre, new LinesOf3Panels());
+
+        currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+        hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
     }
 
     public void ClearLineWithAI()
@@ -466,7 +517,18 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (Direction() == new Vector3(0, 0, 1))
         {
-            currentPanel.transform.position = new Vector3(ppX, ppY, 0);
+            if (currentPanel.GetComponent<Panels>().ID > 300)
+            {
+                UsingBonus(currentPanel);
+                countOfMoves--;
+                moves.text = "Moves: " + countOfMoves.ToString();
+                LosingControl();
+                matchFound = false;
+            }
+            else
+            {
+                currentPanel.transform.position = new Vector3(ppX, ppY, 0);
+            }
         }
         else
         {
@@ -625,14 +687,17 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void ClearPanelWithAI(GameObject obj)
     {
         int minus = 1;
-        if(obj == currentPanel)
+        if (hitPanel)
         {
-            hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
-            minus = -1;
-        }
-        else
-        {
-            currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+            if (obj == currentPanel)
+            {
+                hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                minus = -1;
+            }
+            else
+            {
+                currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+            }
         }
 
         obj.GetComponent<BoxCollider2D>().enabled = false;
@@ -673,7 +738,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void ClearPanelOnCube(GameObject obj, int width)
     {
-        List<GameObject> panelList = new List<GameObject>() { currentPanel, hitPanel.transform.gameObject };
+        List<GameObject> panelList = new List<GameObject>() { currentPanel };
+        if (hitPanel)
+        {
+            panelList.Add(hitPanel.transform.gameObject);
+        }
 
         for (int i = 0; i < width; i++)
         {
@@ -803,13 +872,12 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         if (matchingTiles.Count == 5)
         {
+            matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_LinesOf3Panels";
             for (int i = 0; i < matchingTiles.Count; i++)
             {
                 matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
                 countOfScore += (int)(scorePerPanel * 1.7f);
             }
-            matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_LinesOf3Panels";
-            Debug.Log("Clear Match On Crossed Lines");
             GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
             matchFound = true;
         }
@@ -834,12 +902,12 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
             else if (matchingTiles.Count == 4)
             {
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
                 for (int i = 0; i < matchingTiles.Count; i++)
                 {
                     matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
                     countOfScore += (int)(scorePerPanel * 1.3f);
                 }
-                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
                 if (matchingTiles[1].transform.position.x - matchingTiles[2].transform.position.x == 0)
                 {
                     verticalBonus = false;
@@ -851,12 +919,12 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
             else
             {
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_5LineBonus";
                 for (int i = 0; i < matchingTiles.Count; i++)
                 {
                     matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
                     countOfScore += scorePerPanel * 2;
                 }
-                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_5LineBonus";
             }
             GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
             matchFound = true;
@@ -890,6 +958,43 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
 
     ///      Find Matches and delete sprite     ///
+    
+    public List<GameObject> SingleClolorPanels()
+    {
+        List<GameObject> allObj = AllPanels();
+        List<GameObject> SingeClolorPanels = new List<GameObject>();
+        int ID = -1;
+        if (hitPanel)
+        {
+            if (currentPanel.GetComponent<Panels>().ID > 300 && hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
+            {
+                ID = UnityEngine.Random.Range(0, 6);
+            }
+            else if (currentPanel.GetComponent<Panels>().ID > 300)
+            {
+                ID = hitPanel.transform.gameObject.GetComponent<Panels>().ID;
+                allObj.Add(hitPanel.transform.gameObject);
+            }
+            else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
+            {
+                ID = currentPanel.GetComponent<Panels>().ID;
+                allObj.Add(hitPanel.transform.gameObject);
+            }
+        }
+        else
+        {
+            ID = UnityEngine.Random.Range(0, 6);
+        }
+
+        for (int i = 0; i < allObj.Count; i++)
+        {
+            if (allObj[i].GetComponent<Panels>().ID == ID)
+            {
+                SingeClolorPanels.Add(allObj[i]);
+            }
+        }
+        return SingeClolorPanels;
+    }
 
     private List<GameObject> FindMatch(Vector2 castDir, GameObject firstObj, Vector3 secObjPos)
     {
@@ -918,37 +1023,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
         return allObj;
-    }
-
-    public List<GameObject> SingleClolorPanels()
-    {
-        List<GameObject> allObj = AllPanels();
-        List<GameObject> SingeClolorPanels = new List<GameObject>();
-        int ID = -1;
-
-        if (currentPanel.GetComponent<Panels>().ID > 300 && hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
-        {
-            ID = UnityEngine.Random.Range(0, 6);
-        }
-        else if (currentPanel.GetComponent<Panels>().ID > 300)
-        {
-            ID = hitPanel.transform.gameObject.GetComponent<Panels>().ID;
-            allObj.Add(hitPanel.transform.gameObject);
-        }
-        else if (hitPanel.transform.gameObject.GetComponent<Panels>().ID > 300)
-        {
-            ID = currentPanel.GetComponent<Panels>().ID;
-            allObj.Add(hitPanel.transform.gameObject);
-        }
-
-        for (int i = 0; i < allObj.Count; i++)
-        {
-            if (allObj[i].GetComponent<Panels>().ID == ID)
-            {
-                SingeClolorPanels.Add(allObj[i]);
-            }
-        }
-        return SingeClolorPanels;
     }
 }
 

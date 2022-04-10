@@ -9,9 +9,9 @@ public class BonusControl<T> where T : IBonus
         value.BonusEffect(obj);
     }
 
-    public BonusControl(GameObject gameObject, T value) 
+    public BonusControl(GameObject obj, T value) 
     {
-        value.GivingBonus(gameObject);
+        value.GivingBonus(obj);
     }
 }
 
@@ -35,54 +35,68 @@ public class LineBonus4 : IBonus
     {
         Controller controller = Obj.GetComponent<Panels>().Controller;
 
-        if (controller.currentPanel.GetComponent<Panels>().ID == 301 &&
+        if (controller.hitPanel)
+        {
+            if (controller.currentPanel.GetComponent<Panels>().ID == 301 &&
             controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301)
-        {
-            controller.ClearLine(Obj, true);
-            controller.ClearLine(Obj, false);
-        }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302) ||
-                 (controller.currentPanel.GetComponent<Panels>().ID == 302 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
-        {
-            controller.ClearLineWithAI();
-        }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303) ||
-                 (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
-        {
-            for(int i = 0; i < 3; i++)
             {
-                RaycastHit2D[] line = Physics2D.RaycastAll(new Vector3(controller.currentPanel.transform.position.x - 1 + i, controller.creatingPanel.startPosition.y, 0), Vector2.down, 100f, LayerMask.GetMask("Panel"));
-                Debug.Log(line.Length);
-                if (line.Length != 0)
+                controller.ClearLine(Obj, true);
+                controller.ClearLine(Obj, false);
+            }
+            else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302) ||
+                     (controller.currentPanel.GetComponent<Panels>().ID == 302 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
+            {
+                controller.ClearLineWithAI();
+            }
+            else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303) ||
+                     (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
+            {
+                for (int i = 0; i < 3; i++)
                 {
-                    for(int j = 0; j < line.Length; j++)
+                    RaycastHit2D[] line = Physics2D.RaycastAll(new Vector3(controller.currentPanel.transform.position.x - 1 + i, controller.creatingPanel.startPosition.y, 0), Vector2.down, 100f, LayerMask.GetMask("Panel"));
+                    Debug.Log(line.Length);
+                    if (line.Length != 0)
                     {
-                        line[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                        for (int j = 0; j < line.Length; j++)
+                        {
+                            line[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                        }
+                    }
+
+                    RaycastHit2D[] line2 = Physics2D.RaycastAll(new Vector3(controller.creatingPanel.startPosition.x, controller.currentPanel.transform.position.y - 1 + i, 0), Vector2.right, 100f, LayerMask.GetMask("Panel"));
+                    if (line.Length != 0)
+                    {
+                        for (int j = 0; j < line2.Length; j++)
+                        {
+                            line2[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                        }
                     }
                 }
-
-                RaycastHit2D[] line2 = Physics2D.RaycastAll(new Vector3(controller.creatingPanel.startPosition.x, controller.currentPanel.transform.position.y - 1 + i, 0), Vector2.right, 100f, LayerMask.GetMask("Panel"));
-                if (line.Length != 0)
+                controller.currentPanel.GetComponent<SpriteRenderer>().sprite = null;
+                controller.hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+            }
+            else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
+                     (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
+            {
+                controller.FillingBonuses301(20);
+            }
+            else
+            {
+                if (Obj.GetComponent<Panels>().deleteOY == true)
                 {
-                    for (int j = 0; j < line2.Length; j++)
-                    {
-                        line2[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
-                    }
+                    controller.ClearLine(Obj, true);
+                }
+                else if (Obj.GetComponent<Panels>().deleteOY == false)
+                {
+                    controller.ClearLine(Obj, false);
                 }
             }
-            controller.currentPanel.GetComponent<SpriteRenderer>().sprite = null;
-            controller.hitPanel.transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
-        }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID == 301 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
-                 (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 301))
-        {
-            controller.FillingBonuses301(20);
         }
         else
         {
@@ -96,8 +110,6 @@ public class LineBonus4 : IBonus
             }
         }
     }
-        
-    
 }
 
 public class CubeBonus : IBonus
@@ -112,34 +124,41 @@ public class CubeBonus : IBonus
     {
         Controller controller = Obj.GetComponent<Panels>().Controller;
 
-
-        if (controller.currentPanel.GetComponent<Panels>().ID == 302 &&
+        if (controller.hitPanel)
+        {
+            if (controller.currentPanel.GetComponent<Panels>().ID == 302 &&
         controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302)
-        {
-            controller.ThreeRandomBonuses();
-        }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID == 302 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303) ||
-                 (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302))
-        {
-
-        }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID == 302 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
-                 (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302))
-        {
-            controller.FillingBonuses302(20);
-        }
-        else /*if ((controller.currentPanel.GetComponent<Panels>().ID < 300 ||
+            {
+                controller.ThreeRandomBonuses();
+            }
+            else if ((controller.currentPanel.GetComponent<Panels>().ID == 302 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303) ||
+                     (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302))
+            {
+                controller.DeployingTheBombWithAI(5);
+            }
+            else if ((controller.currentPanel.GetComponent<Panels>().ID == 302 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
+                     (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 302))
+            {
+                controller.FillingBonuses302(20);
+            }
+            else /*if ((controller.currentPanel.GetComponent<Panels>().ID < 300 ||
                 controller.currentPanel.GetComponent<Panels>().ID > 302) ||
                 (controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID < 300 ||
                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID > 302))*/
-        {
+            {
 
+                controller.ClearPanelWithAI(Obj);
+            }
+        }
+        else
+        {
             controller.ClearPanelWithAI(Obj);
         }
+        
 
     }
 }
@@ -156,24 +175,27 @@ public class LinesOf3Panels : IBonus
     {
         Controller controller = Obj.GetComponent<Panels>().Controller;
 
-
-        if (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
+        if (controller.hitPanel)
+        {
+            if (controller.currentPanel.GetComponent<Panels>().ID == 303 &&
         controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303)
-        {
-            controller.ClearPanelOnCube(Obj, 8);
+            {
+                controller.ClearPanelOnCube(Obj, 8);
+            }
+            else if ((controller.currentPanel.GetComponent<Panels>().ID == 303 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
+                     (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
+                     controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303))
+            {
+                controller.FillingBonuses303(20);
+            }
+            else
+            {
+                controller.ClearPanelOnCube(Obj, 5);
+            }
         }
-        else if ((controller.currentPanel.GetComponent<Panels>().ID == 303 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304) ||
-                 (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
-                 controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 303))
-        {
-            controller.FillingBonuses303(20);
-        }
-        else 
-        {
+        else
             controller.ClearPanelOnCube(Obj, 5);
-        }
-
     }
 }
 
@@ -189,12 +211,24 @@ public class LineBonus5 : IBonus
     public void BonusEffect(GameObject Obj)
     {
         Controller controller = Obj.GetComponent<Panels>().Controller;
-        if (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
-            controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304)
+        if (controller.hitPanel)
         {
-            controller.DestroyAll();
+            if (controller.currentPanel.GetComponent<Panels>().ID == 304 &&
+            controller.hitPanel.transform.gameObject.GetComponent<Panels>().ID == 304)
+            {
+                controller.DestroyAll();
+            }
+            else
+            {
+                List<GameObject> panels = controller.SingleClolorPanels();
+                Obj.GetComponent<SpriteRenderer>().sprite = null;
+                for (int i = 0; i < panels.Count; i++)
+                {
+                    panels[i].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
         }
-        else 
+        else
         {
             List<GameObject> panels = controller.SingleClolorPanels();
             Obj.GetComponent<SpriteRenderer>().sprite = null;
