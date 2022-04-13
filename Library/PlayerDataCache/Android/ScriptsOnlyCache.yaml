@@ -21,6 +21,8 @@ ScriptsOnlyBuild:
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
     - UnityEditor.Tilemaps.TilemapPrefabStageHelper
+    Unity.CollabProxy.Editor.dll:
+    - Unity.Cloud.Collaborate.UserInterface.CollaborateWindow
     Unity.Mobile.AndroidLogcat.Editor.dll:
     - Unity.Android.Logcat.AndroidLogcatManager
     Unity.Rider.Editor.dll:
@@ -59,29 +61,29 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1476}
     - Class: 114
-      Script: {instanceID: 1734}
+      Script: {instanceID: 1750}
     - Class: 114
-      Script: {instanceID: 1752}
+      Script: {instanceID: 1768}
     - Class: 114
-      Script: {instanceID: 1998}
+      Script: {instanceID: 2030}
     - Class: 114
-      Script: {instanceID: 2272}
+      Script: {instanceID: 2324}
     - Class: 114
-      Script: {instanceID: 2698}
+      Script: {instanceID: 2766}
     - Class: 114
-      Script: {instanceID: 2864}
+      Script: {instanceID: 2944}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 3200}
     - Class: 114
-      Script: {instanceID: 3164}
+      Script: {instanceID: 3264}
     - Class: 114
-      Script: {instanceID: 3358}
+      Script: {instanceID: 3462}
     - Class: 114
-      Script: {instanceID: 3474}
+      Script: {instanceID: 3586}
     - Class: 114
-      Script: {instanceID: 4722}
+      Script: {instanceID: 4910}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -118,29 +120,29 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1476}
     - Class: 114
-      Script: {instanceID: 1734}
+      Script: {instanceID: 1750}
     - Class: 114
-      Script: {instanceID: 1752}
+      Script: {instanceID: 1768}
     - Class: 114
-      Script: {instanceID: 2272}
+      Script: {instanceID: 2324}
     - Class: 114
-      Script: {instanceID: 2698}
+      Script: {instanceID: 2766}
     - Class: 114
-      Script: {instanceID: 2864}
+      Script: {instanceID: 2944}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 3200}
     - Class: 114
-      Script: {instanceID: 3358}
+      Script: {instanceID: 3462}
     - Class: 114
-      Script: {instanceID: 3474}
+      Script: {instanceID: 3586}
     - Class: 114
-      Script: {instanceID: 3692}
+      Script: {instanceID: 3812}
     - Class: 114
-      Script: {instanceID: 3842}
+      Script: {instanceID: 3970}
     - Class: 114
-      Script: {instanceID: 4698}
+      Script: {instanceID: 4884}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -177,23 +179,23 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1476}
     - Class: 114
-      Script: {instanceID: 1734}
+      Script: {instanceID: 1750}
     - Class: 114
-      Script: {instanceID: 1752}
+      Script: {instanceID: 1768}
     - Class: 114
-      Script: {instanceID: 2272}
+      Script: {instanceID: 2324}
     - Class: 114
-      Script: {instanceID: 2698}
+      Script: {instanceID: 2766}
     - Class: 114
-      Script: {instanceID: 2864}
+      Script: {instanceID: 2944}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 3200}
     - Class: 114
-      Script: {instanceID: 3358}
+      Script: {instanceID: 3462}
     - Class: 114
-      Script: {instanceID: 3474}
+      Script: {instanceID: 3586}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -501,7 +503,7 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 3cbdb6ea0b8be134ac21d326126b9144
+      Hash: 41dcd36708105a437cf61e984a49035f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Controller
@@ -657,7 +659,7 @@ ScriptsOnlyBuild:
     className: TMP_ColorGradient
   - hash:
       serializedVersion: 2
-      Hash: 79d86607aeaf822d1e7fb27a71f3a0a4
+      Hash: a83457f5624c9f749c87ed97c83431e1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CreatingPanels

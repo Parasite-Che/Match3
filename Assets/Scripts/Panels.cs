@@ -7,6 +7,7 @@ public class Panels : MonoBehaviour
 {
     public Controller Controller;
     CreatingPanels creatingPanel;
+
     public int health;
     public int ID;
     public float falling = 0;
@@ -14,6 +15,7 @@ public class Panels : MonoBehaviour
 
     public string bonusName = "";
     bool topPanels = true;
+    bool fallen = false;
 
     private void Awake()
     {
@@ -25,17 +27,22 @@ public class Panels : MonoBehaviour
     {
         if (falling > 0)
         {
-            transform.position += new Vector3(0, -0.1f, 0);
-            falling -= 0.1f;
+            transform.position += new Vector3(0, -0.15f, 0);
+            falling -= 0.15f;
             creatingPanel.isFalling = true;
             if (falling < 0)
             {
-                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.15f));
-                Controller.AllMatches(true, gameObject);
+                transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.31f));
+                fallen = true;
                 falling = 0;
                 creatingPanel.isFalling = false;
                 Controller.matchFound = false;
             }
+        }
+        if (fallen && creatingPanel.isFalling == false)
+        {
+            Controller.AllMatches(true, gameObject);
+            fallen = false;
         }
         DeletePanel();
     }
@@ -104,11 +111,14 @@ public class Panels : MonoBehaviour
                             if (Controller.panelGoal[i] > 0)
                             {
                                 goals = false;
+                                break;
                             }
                         }
                         if (goals)
                         {
+                            Controller.field.SetActive(false);
                             Controller.WinScreen.SetActive(true);
+                            Controller.winText.text = "Great!\nYour Score: " + Controller.countOfScore.ToString();
                             for (int i = 0; i < Controller.goalsList.Length; i++)
                             {
                                 if (Controller.goalsList[i] != null)

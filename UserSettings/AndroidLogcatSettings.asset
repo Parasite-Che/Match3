@@ -6,12 +6,24 @@
         "processId": 0,
         "exited": false
     },
-    "m_SelectedPriority": 0,
+    "m_SelectedPriority": 5,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "09d80eb10805",
             "name": "com.android.launcher3",
             "processId": 3661,
+            "exited": true
+        },
+        {
+            "deviceId": "09d80eb10805",
+            "name": "com.android.launcher3",
+            "processId": 27196,
+            "exited": true
+        },
+        {
+            "deviceId": "09d80eb10805",
+            "name": "com.android.launcher3",
+            "processId": 26849,
             "exited": false
         }
     ],
