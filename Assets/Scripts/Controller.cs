@@ -41,6 +41,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Vector2 clickPos;
     public RaycastHit2D hitPanel;
 
+    public Sprite rocket;
+    public Sprite lighting;
+    public Sprite explosiveBarrel;
+    public Sprite eraser;
+
     private void Awake()
     {
         Application.targetFrameRate = 60;

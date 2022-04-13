@@ -27,6 +27,7 @@ public class LineBonus4 : IBonus
     public void GivingBonus(GameObject Obj)
     {
         Obj.GetComponent<SpriteRenderer>().color = new Color32(214, 231, 86, 255);
+        Obj.GetComponent<SpriteRenderer>().sprite = Obj.GetComponent<Panels>().Controller.rocket;
         Obj.GetComponent<Panels>().bonusName = "LineBonus4";
         Obj.GetComponent<Panels>().deleteOY = Obj.GetComponent<Panels>().Controller.verticalBonus;
         Obj.GetComponent<Panels>().ID = 301;
@@ -117,6 +118,7 @@ public class CubeBonus : IBonus
     public void GivingBonus(GameObject Obj)
     {
         Obj.GetComponent<SpriteRenderer>().color = new Color32(185, 115, 0, 255);
+        Obj.GetComponent<SpriteRenderer>().sprite = Obj.GetComponent<Panels>().Controller.lighting;
         Obj.GetComponent<Panels>().bonusName = "CubeBonus";
         Obj.GetComponent<Panels>().ID = 302;
     }
@@ -168,6 +170,7 @@ public class LinesOf3Panels : IBonus
     public void GivingBonus(GameObject Obj)
     {
         Obj.GetComponent<SpriteRenderer>().color = new Color32(151, 190, 51, 255);
+        Obj.GetComponent<SpriteRenderer>().sprite = Obj.GetComponent<Panels>().Controller.explosiveBarrel;
         Obj.GetComponent<Panels>().bonusName = "LinesOf3Panels";
         Obj.GetComponent<Panels>().ID = 303;
     }
@@ -204,6 +207,7 @@ public class LineBonus5 : IBonus
     public void GivingBonus(GameObject Obj)
     {
         Obj.GetComponent<SpriteRenderer>().color = new Color32(30, 31, 130, 255);
+        Obj.GetComponent<SpriteRenderer>().sprite = Obj.GetComponent<Panels>().Controller.eraser;
         Obj.GetComponent<Panels>().bonusName = "LineBonus5";
         Obj.GetComponent<Panels>().ID = 304;
     }

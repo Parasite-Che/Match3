@@ -2881,6 +2881,10 @@ MonoBehaviour:
   loseText: {fileID: 1635324284}
   moves: {fileID: 749610324}
   clickPos: {x: 0, y: 0}
+  rocket: {fileID: 21300000, guid: d36705b2e476ea04392266923fa8ce1f, type: 3}
+  lighting: {fileID: 21300000, guid: a06659dfb8744c24197c5668cb766702, type: 3}
+  explosiveBarrel: {fileID: 21300000, guid: 4362ac1c5135b874bb9150d9c36ad4b0, type: 3}
+  eraser: {fileID: 21300000, guid: 1c2e5b7a12c0dae4797ae20cdbc25041, type: 3}
 --- !u!114 &1821160011
 MonoBehaviour:
   m_ObjectHideFlags: 0
