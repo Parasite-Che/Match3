@@ -15,6 +15,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public int[] panelGoal;
     public int countOfMoves;
     public int countOfScore = 0;
+    int numberOfLevels = -1;
     int scorePerPanel = 10;
 
     public CreatingPanels creatingPanel;
@@ -27,6 +28,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public GameObject WinScreen;
     public GameObject[] goalsList;
     readonly GameObject[] objList = new GameObject[4];
+    public List<GameObject> objInFalling = new List<GameObject>();
 
 
     public bool hold = false;
@@ -49,6 +51,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     private void Awake()
     {
         Application.targetFrameRate = 60;
+        numberOfLevels = PlayerPrefs.GetInt("Level number");
         creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
         CreatingGoal();
     }
@@ -116,12 +119,20 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         panelGoal = new int[panels.Count];
         goalsList = new GameObject[panels.Count];
-        //panelGoal[0] = 40;
+        Level level = new Level();
+        level._id = (short)PlayerPrefs.GetInt("Level number");
+        level.field = new byte[creatingPanel.countOfPanelsOX, creatingPanel.countOfPanelsOY];
+        string json = JsonUtility.ToJson(level);
+        Debug.Log(json);
+
+        panelGoal[0] = 0;
         panelGoal[1] = 40; 
-        //panelGoal[2] = 40;
+        panelGoal[2] = 0;
         panelGoal[3] = 40;
-        //panelGoal[4] = 40;
+        panelGoal[4] = 0;
+
         countOfMoves = 40;
+
         int countGoals = 0;
         moves.text = "Moves: " + countOfMoves.ToString();
         for (int i = 0; i < panelGoal.Length; i++)

@@ -12,9 +12,10 @@ public class Panels : MonoBehaviour
     public int ID;
     public float falling = 0;
     public bool deleteOY;
+    bool inList = false;
+    int posInList = -1;
 
     public string bonusName = "";
-    bool topPanels = true;
     bool fallen = false;
 
     private void Awake()
@@ -23,28 +24,45 @@ public class Panels : MonoBehaviour
         creatingPanel = GameObject.Find("Controller").GetComponent<CreatingPanels>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (falling > 0)
         {
+            if (!inList)
+            {
+                Controller.objInFalling.Add(gameObject);
+                posInList = Controller.objInFalling.Count - 1;
+                Debug.Log(posInList);
+                inList = true;
+            }
             transform.position += new Vector3(0, -0.15f, 0);
             falling -= 0.15f;
             creatingPanel.isFalling = true;
             if (falling < 0)
             {
                 transform.position = new Vector3(transform.position.x, Mathf.Floor(transform.position.y + 0.31f));
+                if (inList)
+                {
+                    Controller.objInFalling.RemoveAt(Controller.objInFalling.Count - 1);
+                    Debug.Log(Controller.objInFalling.Count);
+                    inList = false;
+                }
+                if (Controller.objInFalling.Count == 0)
+                {
+                    creatingPanel.isFalling = false;
+                }
                 fallen = true;
                 falling = 0;
-                creatingPanel.isFalling = false;
                 Controller.matchFound = false;
             }
         }
-        if (fallen && creatingPanel.isFalling == false)
+        
+        DeletePanel();
+        if (fallen && !creatingPanel.isFalling)
         {
             Controller.AllMatches(true, gameObject);
             fallen = false;
         }
-        DeletePanel();
     }
 
     private void OnMouseDown()
@@ -97,6 +115,14 @@ public class Panels : MonoBehaviour
     {
         if (gameObject.GetComponent<SpriteRenderer>().sprite == null)
         {
+            for (int i = 0; i < Controller.objInFalling.Count; i++)
+            {
+                if (Controller.objInFalling[i] == gameObject)
+                {
+                    Controller.objInFalling.RemoveAt(i);
+                }
+            }
+
             if (ID < 300)
             {
                 if (Controller.panelGoal[ID] > 0)
@@ -137,12 +163,9 @@ public class Panels : MonoBehaviour
             {
                 for (int j = 0; j < hits.Length; j++)
                 {
-                    hits[j].transform.gameObject.GetComponent<Panels>().falling += 1;
-                    if (hits[j].transform.GetComponent<SpriteRenderer>().sprite != null)
-                    {
-                        topPanels = false;
-                    }
+                    hits[j].transform.gameObject.GetComponent<Panels>().falling++;
                 }
+
                 int rand = Random.Range(0, hits.Length);
                 if (bonusName == "_CubeBonus")
                 {
@@ -160,16 +183,8 @@ public class Panels : MonoBehaviour
                 {
                     _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
                 }
-
-                if (topPanels)
-                {
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    Destroy(gameObject);
-                    creatingPanel.isFalling = false;
-                }
+                Destroy(gameObject);
+                creatingPanel.isFalling = false;
             }
         }
     }

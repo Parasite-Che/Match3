@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,6 +12,10 @@ public class MenuController : MonoBehaviour
     public Slider bar;
 
     public void LoadSceneButton(){
+        if (loadLevel == "Level")
+        {
+            PlayerPrefs.SetInt("Level number", int.Parse(gameObject.name));
+        }
         LoadingPanel.SetActive(true);
         StartCoroutine(LoadAsync());
     }

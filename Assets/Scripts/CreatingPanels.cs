@@ -45,7 +45,7 @@ public class CreatingPanels : MonoBehaviour
         }
     }
 
-    ///     creating a panel at a specific point     ///
+    ///     creating a panel at a specific point    ///
 
     public void CreatePanel(int ID, Vector3 pos)
     {
@@ -53,7 +53,7 @@ public class CreatingPanels : MonoBehaviour
         obj.GetComponent<Panels>().ID = ID;
     }
 
-    ///     checking and populating a column with panels     ///
+    ///     checking and populating a column with panels    ///
 
     public void FillingInEmptyFields(float posX)
     {
