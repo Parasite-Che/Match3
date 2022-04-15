@@ -1,9 +1,11 @@
 using System.Collections;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
@@ -15,7 +17,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public int[] panelGoal;
     public int countOfMoves;
     public int countOfScore = 0;
-    int numberOfLevels = -1;
     int scorePerPanel = 10;
 
     public CreatingPanels creatingPanel;
@@ -48,11 +49,14 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Sprite explosiveBarrel;
     public Sprite eraser;
 
+    public Level level = new Level();
+
     private void Awake()
     {
+        level = JsonConvert.DeserializeObject<Level>(File.ReadAllText(Application.streamingAssetsPath + "/" + PlayerPrefs.GetInt("Level number").ToString() + ".json"));
         Application.targetFrameRate = 60;
-        numberOfLevels = PlayerPrefs.GetInt("Level number");
-        creatingPanel.CreateField(creatingPanel.countOfPanelsOY, creatingPanel.countOfPanelsOX);
+        
+        creatingPanel.CreateField();
         CreatingGoal();
     }
 
@@ -119,19 +123,15 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         panelGoal = new int[panels.Count];
         goalsList = new GameObject[panels.Count];
-        Level level = new Level();
-        level._id = (short)PlayerPrefs.GetInt("Level number");
-        level.field = new byte[creatingPanel.countOfPanelsOX, creatingPanel.countOfPanelsOY];
-        string json = JsonUtility.ToJson(level);
-        Debug.Log(json);
 
-        panelGoal[0] = 0;
-        panelGoal[1] = 40; 
-        panelGoal[2] = 0;
-        panelGoal[3] = 40;
-        panelGoal[4] = 0;
+        Debug.Log(JsonConvert.SerializeObject(level));
 
-        countOfMoves = 40;
+        for (int i = 0; i < panelGoal.Length; i++)
+        {
+            panelGoal[i] = level.goals[0, i];
+        }
+        
+        countOfMoves = level.countOfMoves;
 
         int countGoals = 0;
         moves.text = "Moves: " + countOfMoves.ToString();

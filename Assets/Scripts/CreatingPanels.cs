@@ -15,29 +15,39 @@ public class CreatingPanels : MonoBehaviour
 
     ///   Creating a field (countOfPanelsOX - number of columns, countOfPanelsOY - number of rows)   ///
 
-    public void CreateField(int col, int row)
+    public void CreateField()
     {
         Vector3 cp = startPosition;
         int rand = -1;
         int[] previousAbove = new int[countOfPanelsOX];
         int previousLeft = -1;
 
-        for (int i = 0; i < col; i++)
+        for (int i = 0; i < controller.level.field.GetLength(0); i++)
         {
-            for (int j = 0; j < row; j++)
+            for (int j = 0; j < controller.level.field.GetLength(1); j++)
             {
-
-                while (rand == previousLeft || rand == previousAbove[j])
+                if (controller.level.field[i,j] == 0)
                 {
-                    rand = Random.Range(0, 6);
+
                 }
-
-                if (rand != -1)
+                else if (controller.level.field[i, j] == 1)
                 {
-                    GameObject obj = Instantiate(controller.panels[rand].obj, new Vector3(cp.x + j, cp.y - i, 0), Quaternion.identity, field.transform);
-                    obj.GetComponent<Panels>().ID = rand;
-                    previousAbove[j] = obj.GetComponent<Panels>().ID;
-                    previousLeft = obj.GetComponent<Panels>().ID;
+                    while (rand == previousLeft || rand == previousAbove[j])
+                    {
+                        rand = Random.Range(0, 6);
+                    }
+
+                    if (rand != -1)
+                    {
+                        GameObject obj = Instantiate(controller.panels[rand].obj, new Vector3(cp.x + j, cp.y - i, 0), Quaternion.identity, field.transform);
+                        obj.GetComponent<Panels>().ID = rand;
+                        previousAbove[j] = obj.GetComponent<Panels>().ID;
+                        previousLeft = obj.GetComponent<Panels>().ID;
+                    }
+                }
+                else if (controller.level.field[i, j] == 2)
+                {
+
                 }
             }
             previousLeft = -1;

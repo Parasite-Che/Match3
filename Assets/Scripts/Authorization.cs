@@ -13,7 +13,6 @@ public class Authorization : MonoBehaviour
     private void Awake()
     {
         playerName = PlayerPrefs.GetString("PlayerName");
-        Debug.Log(playerName);
         if (playerName == "")
         {
             menu.SetActive(false);
