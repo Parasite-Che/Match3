@@ -18,6 +18,9 @@ public class Panels : MonoBehaviour
     public string bonusName = "";
     bool fallen = false;
 
+    JsonControl JC = new JsonControl();
+    Save save;
+
     private void Awake()
     {
         Controller = GameObject.Find("Controller").GetComponent<Controller>();
@@ -129,7 +132,7 @@ public class Panels : MonoBehaviour
                 {
                     Controller.panelGoal[ID]--;
                     Controller.goalsList[ID].transform.GetChild(0).GetComponent<Text>().text = Controller.panelGoal[ID].ToString();
-                    if (Controller.panelGoal[ID] == 0)
+                    if (Controller.panelGoal[ID] <= 0)
                     {
                         bool goals = true;
                         for (int i = 0; i < Controller.panelGoal.Length; i++ )
@@ -142,8 +145,18 @@ public class Panels : MonoBehaviour
                         }
                         if (goals)
                         {
+                            JC = new JsonControl();
+                            save = JC.LoadJson();
+                            save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] = Controller.countOfScore;
+                            SetStars();
+                            JC.SaveJson(save);
+
                             Controller.field.SetActive(false);
                             Controller.WinScreen.SetActive(true);
+                            if (Controller.loseScreen.activeSelf)
+                            {
+                                Controller.loseScreen.SetActive(true);
+                            }
                             Controller.winText.text = "Great!\nYour Score: " + Controller.countOfScore.ToString();
                             for (int i = 0; i < Controller.goalsList.Length; i++)
                             {
@@ -186,6 +199,22 @@ public class Panels : MonoBehaviour
                 Destroy(gameObject);
                 creatingPanel.isFalling = false;
             }
+        }
+    }
+
+    public void SetStars()
+    {
+        if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > (save.levels[PlayerPrefs.GetInt("Level number") - 1, 2]))
+        {
+            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 3;
+        }
+        else if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > ((save.levels[PlayerPrefs.GetInt("Level number") - 1, 2] * 2) / 3))
+        {
+            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 2;
+        }
+        else if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > (save.levels[PlayerPrefs.GetInt("Level number") - 1, 2] / 3))
+        {
+            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 1;
         }
     }
 }

@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
+using System.IO;
+using Newtonsoft.Json;
 
 public class MenuController : MonoBehaviour
 {
@@ -10,11 +13,20 @@ public class MenuController : MonoBehaviour
     public GameObject LoadingPanel;
     public GameObject first;
     public GameObject second;
+    public GameObject mapButton;
+
     public List<GameObject> panelFromMenu;
+    public List<GameObject> buttonFromMenu;
 
     public Slider bar;
 
     public void LoadSceneButton(){
+        LoadingPanel.SetActive(true);
+        StartCoroutine(LoadAsync());
+    }
+
+    public void LoadLevelButton()
+    {
         LoadingPanel.SetActive(true);
         StartCoroutine(LoadAsync());
     }
@@ -39,10 +51,28 @@ public class MenuController : MonoBehaviour
     public void MenuNavigation()
     {
         GameObject obj;
+        Color col = buttonFromMenu[0].GetComponent<Image>().color;
         for (int i = 0; i < panelFromMenu.Count; i++)
         {
             if (panelFromMenu[i].activeSelf)
             {
+                if (mapButton.GetComponent<Image>().color == new Color32(47, 162, 133, 255))
+                {
+                    mapButton.GetComponent<Image>().color = new Color32(87, 202, 173, 255);
+                }
+                for (int j = 0; j < buttonFromMenu.Count; j++)
+                {
+                    if (buttonFromMenu[j].GetComponent<Image>().color != col)
+                    {
+                        Debug.Log(buttonFromMenu[j].GetComponent<Image>().color);
+                        buttonFromMenu[j].GetComponent<Image>().color = col;
+                        Debug.Log(buttonFromMenu[j]);
+                        Debug.Log(buttonFromMenu[j].GetComponent<Image>().color);
+                        break;
+                    }
+                }
+                gameObject.GetComponent<Image>().color -= new Color32(40, 40, 40, 0);
+
                 obj = panelFromMenu[i];
                 obj.SetActive(false);
                 first.SetActive(true);

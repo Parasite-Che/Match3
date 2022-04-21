@@ -568,6 +568,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!1 &441502027
 GameObject:
@@ -982,7 +985,7 @@ GameObject:
   - component: {fileID: 782343094}
   - component: {fileID: 782343095}
   m_Layer: 5
-  m_Name: ToMap
+  m_Name: Restart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1005,8 +1008,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -153.03, y: 121}
-  m_SizeDelta: {x: 492.37, y: 156.5}
+  m_AnchoredPosition: {x: 209, y: 135}
+  m_SizeDelta: {x: 350.83, y: 156.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &782343091
 MonoBehaviour:
@@ -1052,13 +1055,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1571448861}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: RestartTheApp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1118,6 +1121,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!114 &782343095
 MonoBehaviour:
@@ -1135,6 +1141,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!1 &786270577
 GameObject:
@@ -1816,6 +1825,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1502160847 stripped
 GameObject:
@@ -1977,6 +1989,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 772623054}
   second: {fileID: 441502027}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1571448859
 GameObject:
@@ -2015,8 +2030,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 261.54, y: 121}
-  m_SizeDelta: {x: 278.55, y: 156.5}
+  m_AnchoredPosition: {x: -215.86, y: 135}
+  m_SizeDelta: {x: 350.83, y: 156.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1571448861
 MonoBehaviour:
@@ -2034,6 +2049,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!114 &1571448862
 MonoBehaviour:
@@ -2342,6 +2360,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!114 &1665734355
 MonoBehaviour:
@@ -2507,7 +2528,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: To Map
+  m_Text: Restart
 --- !u!222 &1692112032
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2872,6 +2893,7 @@ MonoBehaviour:
   loseScreen: {fileID: 1656169544}
   WinScreen: {fileID: 1376512333}
   goalsList: []
+  objInFalling: []
   hold: 0
   lockDirectX: 0
   lockDirectY: 0
@@ -2919,6 +2941,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1829448962
 GameObject:
@@ -3149,6 +3174,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 441502027}
   second: {fileID: 772623054}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1896825305
 GameObject:

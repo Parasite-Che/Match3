@@ -51,9 +51,13 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public Level level = new Level();
 
+    JsonControl JC;
+
     private void Awake()
     {
-        level = JsonConvert.DeserializeObject<Level>(File.ReadAllText(Application.streamingAssetsPath + "/" + PlayerPrefs.GetInt("Level number").ToString() + ".json"));
+        JC = new JsonControl();
+        level = JC.LoadFromRecurces(PlayerPrefs.GetInt("Level number").ToString());
+        Debug.Log(Application.dataPath);
         Application.targetFrameRate = 60;
         
         creatingPanel.CreateField();
@@ -123,8 +127,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         panelGoal = new int[panels.Count];
         goalsList = new GameObject[panels.Count];
-
-        Debug.Log(JsonConvert.SerializeObject(level));
 
         for (int i = 0; i < panelGoal.Length; i++)
         {
@@ -612,6 +614,17 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             field.SetActive(false);
             loseScreen.SetActive(true);
+            DateTime time = JsonConvert.DeserializeObject<DateTime>(PlayerPrefs.GetString("timeToAddLife"));
+
+            if (DateTime.Now < time)
+            {
+                PlayerPrefs.SetString("timeToAddLife", JsonConvert.SerializeObject(time.AddMinutes(24)));
+            }
+            else
+            {
+                PlayerPrefs.SetString("timeToAddLife", JsonConvert.SerializeObject(DateTime.Now.AddMinutes(24)));
+            }
+
             loseText.text = "You lose!\nYour Score: " + countOfScore.ToString();
             for (int i = 0; i < goalsList.Length; i++)
             {
