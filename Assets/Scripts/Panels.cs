@@ -47,7 +47,7 @@ public class Panels : MonoBehaviour
                 if (inList)
                 {
                     Controller.objInFalling.RemoveAt(Controller.objInFalling.Count - 1);
-                    Debug.Log(Controller.objInFalling.Count);
+                    //Debug.Log(Controller.objInFalling.Count);
                     inList = false;
                 }
                 if (Controller.objInFalling.Count == 0)

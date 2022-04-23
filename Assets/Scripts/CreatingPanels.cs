@@ -84,4 +84,12 @@ public class CreatingPanels : MonoBehaviour
             }
         }
     }
+
+    public void CheckAllField()
+    {
+        for (int i = 0; i < countOfPanelsOX; i++)
+        {
+
+        }
+    }
 }

@@ -19,7 +19,6 @@ public class JsonControl
         Debug.Log("Unity Editor");
 #elif UNITY_ANDROID
         File.WriteAllText(mobilePath + "/-Save.json", json);
-        Debug.Log("Android");
 #endif
     }
 
@@ -30,10 +29,8 @@ public class JsonControl
         mobilePath = Application.persistentDataPath;
 #if UNITY_EDITOR
         lvl = JsonConvert.DeserializeObject<Save>(File.ReadAllText(path + "/-Save.json"));
-        Debug.Log("Unity Editor");
 #elif UNITY_ANDROID
         lvl = JsonConvert.DeserializeObject<Save>(File.ReadAllText(mobilePath + "/-Save.json"));
-        Debug.Log("Android");
 #endif
 
         return lvl;

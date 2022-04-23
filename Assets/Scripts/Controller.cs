@@ -57,7 +57,6 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         JC = new JsonControl();
         level = JC.LoadFromRecurces(PlayerPrefs.GetInt("Level number").ToString());
-        Debug.Log(Application.dataPath);
         Application.targetFrameRate = 60;
         
         creatingPanel.CreateField();
@@ -153,7 +152,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 {       
                     if (panelGoal[i] > 0)
                     {
-                        GameObject obj = Instantiate(layout, new Vector3(0, creatingPanel.countOfPanelsOY, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                        GameObject obj = Instantiate(layout, new Vector3(0, creatingPanel.countOfPanelsOY - 1, 0), Quaternion.identity, GameObject.Find("GameField").transform);
                         obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
                         obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
                         goalsList[i] = obj;
@@ -168,7 +167,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 {
                     if (panelGoal[i] > 0)
                     {
-                        GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY , 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                        GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY - 1 , 0), Quaternion.identity, GameObject.Find("GameField").transform);
                         obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
                         obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
                         goalsList[i] = obj;
@@ -184,7 +183,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 if (panelGoal[i] > 0)
                 {
-                    GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY , 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                    GameObject obj = Instantiate(layout, new Vector3(-countGoals + 1 + j * 2, creatingPanel.countOfPanelsOY - 1, 0), Quaternion.identity, GameObject.Find("GameField").transform);
                     obj.GetComponent<Image>().color = panels[i].obj.GetComponent<SpriteRenderer>().color;
                     obj.transform.GetChild(0).GetComponent<Text>().text = panelGoal[i].ToString();
                     goalsList[i] = obj;
@@ -845,6 +844,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (oneObj)
         {
             obj.GetComponent<BoxCollider2D>().enabled = false;
+            ClearMatchOnCrossedLines(new Vector2[2] { Vector2.left, Vector2.up }, obj, obj.transform.position);
+            ClearMatchOnCrossedLines(new Vector2[2] { Vector2.left, Vector2.down }, obj, obj.transform.position);
+            ClearMatchOnCrossedLines(new Vector2[2] { Vector2.up, Vector2.right }, obj, obj.transform.position);
+            ClearMatchOnCrossedLines(new Vector2[2] { Vector2.down, Vector2.right }, obj, obj.transform.position);
+
             ClearMatchOnLine(new Vector2[2] { Vector2.left, Vector2.right }, obj, obj.transform.position);
             ClearMatchOnLine(new Vector2[2] { Vector2.up, Vector2.down }, obj, obj.transform.position);
 
@@ -894,94 +898,103 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     private void ClearMatchOnCrossedLines(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
     {
-        List<GameObject> matchingTiles = new List<GameObject> { firstObj };
-        for (int i = 0; i < paths.Length; i++)
+        if (!matchFound)
         {
-            matchingTiles.AddRange(FindMatch(paths[i], firstObj, secObjPos));
-        }
-        if (matchingTiles.Count == 5)
-        {
-            matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_LinesOf3Panels";
-            for (int i = 0; i < matchingTiles.Count; i++)
+            List<GameObject> matchingTiles = new List<GameObject> { firstObj };
+            for (int i = 0; i < paths.Length; i++)
             {
-                matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                countOfScore += (int)(scorePerPanel * 1.7f);
+                matchingTiles.AddRange(FindMatch(paths[i], firstObj, secObjPos));
             }
-            GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
-            matchFound = true;
+            if (matchingTiles.Count == 5)
+            {
+                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_LinesOf3Panels";
+                for (int i = 0; i < matchingTiles.Count; i++)
+                {
+                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                    countOfScore += (int)(scorePerPanel * 1.7f);
+                }
+                GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
+                matchFound = true;
+            }
         }
     }
 
     private void ClearMatchOnLine(Vector2[] paths, GameObject firstObj, Vector3 secObjPos)
     {
-        List<GameObject> matchingTiles = new List<GameObject> { firstObj };
-        for (int i = 0; i < paths.Length; i++)
+        if (!matchFound)
         {
-            matchingTiles.AddRange(FindMatch(paths[i], firstObj, secObjPos));
-        }
-        if (matchingTiles.Count >= 3)
-        {
-            if (matchingTiles.Count == 3)
+            List<GameObject> matchingTiles = new List<GameObject> { firstObj };
+            for (int i = 0; i < paths.Length; i++)
             {
-                for (int i = 0; i < matchingTiles.Count; i++)
-                {
-                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                    countOfScore += scorePerPanel;
-                }
+                matchingTiles.AddRange(FindMatch(paths[i], firstObj, secObjPos));
             }
-            else if (matchingTiles.Count == 4)
+            if (matchingTiles.Count >= 3)
             {
-                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
-                for (int i = 0; i < matchingTiles.Count; i++)
+                if (matchingTiles.Count == 3)
                 {
-                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                    countOfScore += (int)(scorePerPanel * 1.3f);
+                    for (int i = 0; i < matchingTiles.Count; i++)
+                    {
+                        matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                        countOfScore += scorePerPanel;
+                    }
                 }
-                if (matchingTiles[1].transform.position.x - matchingTiles[2].transform.position.x == 0)
+                else if (matchingTiles.Count == 4)
                 {
-                    verticalBonus = false;
+                    matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_4LineBonus";
+                    for (int i = 0; i < matchingTiles.Count; i++)
+                    {
+                        matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                        countOfScore += (int)(scorePerPanel * 1.3f);
+                    }
+                    if (matchingTiles[1].transform.position.x - matchingTiles[2].transform.position.x == 0)
+                    {
+                        verticalBonus = false;
+                    }
+                    else
+                    {
+                        verticalBonus = true;
+                    }
                 }
                 else
                 {
-                    verticalBonus = true;
+                    matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_5LineBonus";
+                    for (int i = 0; i < matchingTiles.Count; i++)
+                    {
+                        matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                        countOfScore += scorePerPanel * 2;
+                    }
                 }
+                GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
+                matchFound = true;
             }
-            else
-            {
-                matchingTiles[UnityEngine.Random.Range(0, matchingTiles.Count)].GetComponent<Panels>().bonusName = "_5LineBonus";
-                for (int i = 0; i < matchingTiles.Count; i++)
-                {
-                    matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
-                    countOfScore += scorePerPanel * 2;
-                }
-            }
-            GameObject.Find("Score").GetComponent<Text>().text = "Score: " + countOfScore.ToString();
-            matchFound = true;
         }
     }
 
     private void ClearMatchOnCub(GameObject Obj, Vector3 dir, Vector3 objPos)
     {
-        objList[0] = Obj;
-        if (Physics2D.Raycast(objPos, dir, 1f, LayerMask.GetMask("Panel")) &&
-            Physics2D.Raycast(objPos, new Vector3(dir.x, 0, 0), 1f, LayerMask.GetMask("Panel")) &&
-            Physics2D.Raycast(objPos, new Vector3(0, dir.y, 0), 1f, LayerMask.GetMask("Panel")))
+        if (!matchFound)
         {
-            objList[1] = Physics2D.Raycast(objPos, dir, 1f, LayerMask.GetMask("Panel")).transform.gameObject;
-            objList[2] = Physics2D.Raycast(objPos, new Vector3(dir.x, 0, 0), 1f, LayerMask.GetMask("Panel")).transform.gameObject;
-            objList[3] = Physics2D.Raycast(objPos, new Vector3(0, dir.y, 0), 1f, LayerMask.GetMask("Panel")).transform.gameObject;
-
-            if (objList[0].GetComponent<Panels>().ID == objList[1].GetComponent<Panels>().ID &&
-                objList[0].GetComponent<Panels>().ID == objList[2].GetComponent<Panels>().ID &&
-                objList[0].GetComponent<Panels>().ID == objList[3].GetComponent<Panels>().ID)
+            objList[0] = Obj;
+            if (Physics2D.Raycast(objPos, dir, 1f, LayerMask.GetMask("Panel")) &&
+                Physics2D.Raycast(objPos, new Vector3(dir.x, 0, 0), 1f, LayerMask.GetMask("Panel")) &&
+                Physics2D.Raycast(objPos, new Vector3(0, dir.y, 0), 1f, LayerMask.GetMask("Panel")))
             {
-                objList[UnityEngine.Random.Range(0, 4)].GetComponent<Panels>().bonusName = "_CubeBonus";
-                for (int i = 0; i < 4; i++)
+                objList[1] = Physics2D.Raycast(objPos, dir, 1f, LayerMask.GetMask("Panel")).transform.gameObject;
+                objList[2] = Physics2D.Raycast(objPos, new Vector3(dir.x, 0, 0), 1f, LayerMask.GetMask("Panel")).transform.gameObject;
+                objList[3] = Physics2D.Raycast(objPos, new Vector3(0, dir.y, 0), 1f, LayerMask.GetMask("Panel")).transform.gameObject;
+
+                if (objList[0].GetComponent<Panels>().ID == objList[1].GetComponent<Panels>().ID &&
+                    objList[0].GetComponent<Panels>().ID == objList[2].GetComponent<Panels>().ID &&
+                    objList[0].GetComponent<Panels>().ID == objList[3].GetComponent<Panels>().ID)
                 {
-                    objList[i].GetComponent<SpriteRenderer>().sprite = null;
-                    countOfScore += (int)(scorePerPanel * 1.5f);
+                    objList[UnityEngine.Random.Range(0, 4)].GetComponent<Panels>().bonusName = "_CubeBonus";
+                    for (int i = 0; i < 4; i++)
+                    {
+                        objList[i].GetComponent<SpriteRenderer>().sprite = null;
+                        countOfScore += (int)(scorePerPanel * 1.5f);
+                    }
+                    matchFound = true;
                 }
-                matchFound = true;
             }
         }
     }
