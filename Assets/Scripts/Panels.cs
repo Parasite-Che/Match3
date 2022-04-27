@@ -53,6 +53,7 @@ public class Panels : MonoBehaviour
                 if (Controller.objInFalling.Count == 0)
                 {
                     creatingPanel.isFalling = false;
+                    creatingPanel.check = false;
                 }
                 fallen = true;
                 falling = 0;
@@ -170,7 +171,8 @@ public class Panels : MonoBehaviour
                 }
             }
 
-            creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
+            creatingPanel.CheckAllField();
+            //creatingPanel.FillingInEmptyFields(gameObject.transform.position.x);
             RaycastHit2D[] hits = Physics2D.RaycastAll(gameObject.transform.position, Vector2.up, 100.0F, LayerMask.GetMask("Panel"));
             if (hits != null)
             {

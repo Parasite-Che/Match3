@@ -14,6 +14,7 @@ public class MenuController : MonoBehaviour
     public GameObject first;
     public GameObject second;
     public GameObject mapButton;
+    public LiveController LC;
 
     public List<GameObject> panelFromMenu;
     public List<GameObject> buttonFromMenu;
@@ -27,8 +28,11 @@ public class MenuController : MonoBehaviour
 
     public void LoadLevelButton()
     {
-        LoadingPanel.SetActive(true);
-        StartCoroutine(LoadAsync());
+        if (int.Parse(LC.livesText.text) > 0)
+        {
+            LoadingPanel.SetActive(true);
+            StartCoroutine(LoadAsync());
+        }
     }
 
     public void LoadUIButton()

@@ -8,6 +8,7 @@ public class CreatingPanels : MonoBehaviour
     public Controller controller;
 
     public bool isFalling = false;
+    public bool check = false;
 
     public int countOfPanelsOX;
     public int countOfPanelsOY;
@@ -87,9 +88,33 @@ public class CreatingPanels : MonoBehaviour
 
     public void CheckAllField()
     {
-        for (int i = 0; i < countOfPanelsOX; i++)
+        if (check == false)
         {
-
+            GameObject obj;
+            int rand;
+            for (int i = 0; i < countOfPanelsOX; i++)
+            {
+                int length = 0;
+                RaycastHit2D[] panels = Physics2D.RaycastAll(new Vector3(startPosition.x + i, -startPosition.y - 1, 0), Vector2.up, 100f, LayerMask.GetMask("Panel"));
+                for (int j = 0; j < panels.Length; j++)
+                {
+                    if (panels[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite != null)
+                    {
+                        length++;
+                    }
+                }
+                if (length < countOfPanelsOY)
+                {
+                    for (int j = 0; j < (countOfPanelsOY - length); j++)
+                    {
+                        rand = Random.Range(0, 6);
+                        obj = Instantiate(controller.panels[rand].obj, new Vector3(panels[j].transform.position.x, startPosition.y + j + 1, 0), Quaternion.identity, field.transform);
+                        obj.GetComponent<Panels>().ID = rand;
+                        //obj.GetComponent<Panels>().falling = (countOfPanelsOY - length - j);
+                    }
+                }
+            }
+            check = true;
         }
     }
 }
