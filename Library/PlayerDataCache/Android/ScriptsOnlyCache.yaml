@@ -7,6 +7,7 @@ ScriptsOnlyBuild:
     - LiveController
     - MenuController
     - Panels
+    - PlayButton
     - SetLevelNumber
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
@@ -88,7 +89,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3984}
     - Class: 114
-      Script: {instanceID: 4898}
+      Script: {instanceID: 4900}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -153,7 +154,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3930}
     - Class: 114
-      Script: {instanceID: 4924}
+      Script: {instanceID: 4748}
+    - Class: 114
+      Script: {instanceID: 4926}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -298,7 +301,7 @@ ScriptsOnlyBuild:
     className: HorizontalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: 0884074470277c38db547130cc0786b8
+      Hash: 6114365de0adb6f95eddc27f48d02ef7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MenuController
@@ -664,6 +667,12 @@ ScriptsOnlyBuild:
     className: SpriteShapeGeometryCache
   - hash:
       serializedVersion: 2
+      Hash: 110297d5111ed48a7821bb428a96a7ed
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayButton
+  - hash:
+      serializedVersion: 2
       Hash: b424b4eeb810aecb0ff91c62639241e9
     assemblyName: Unity.2D.Animation.Runtime.dll
     namespaceName: UnityEngine.Experimental.U2D.Animation
@@ -682,7 +691,7 @@ ScriptsOnlyBuild:
     className: TMP_ColorGradient
   - hash:
       serializedVersion: 2
-      Hash: a83457f5624c9f749c87ed97c83431e1
+      Hash: 2956c816665d7e25e9f6153ca6cd2846
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CreatingPanels

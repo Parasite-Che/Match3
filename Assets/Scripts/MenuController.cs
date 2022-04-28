@@ -52,6 +52,16 @@ public class MenuController : MonoBehaviour
         LoadSceneButton();
     }
 
+    public void PopUpActiv()
+    {
+        first.SetActive(true);
+    }
+
+    public void PopUpDeactiv()
+    {
+        first.SetActive(false);
+    }
+
     public void MenuNavigation()
     {
         GameObject obj;
