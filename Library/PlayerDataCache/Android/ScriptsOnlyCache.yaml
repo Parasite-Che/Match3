@@ -4,8 +4,11 @@ ScriptsOnlyBuild:
     - Authorization
     - Controller
     - CreatingPanels
+    - LiveController
     - MenuController
     - Panels
+    - PlayButton
+    - SetLevelNumber
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
@@ -39,68 +42,12 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
+    - UnityEngine.UI.Outline
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
   sceneClasses:
-    Assets/Scenes/MainMenu.unity:
-    - Class: 1
-      Script: {instanceID: 0}
-    - Class: 4
-      Script: {instanceID: 0}
-    - Class: 20
-      Script: {instanceID: 0}
-    - Class: 21
-      Script: {instanceID: 0}
-    - Class: 28
-      Script: {instanceID: 0}
-    - Class: 48
-      Script: {instanceID: 0}
-    - Class: 81
-      Script: {instanceID: 0}
-    - Class: 104
-      Script: {instanceID: 0}
-    - Class: 114
-      Script: {instanceID: 1476}
-    - Class: 114
-      Script: {instanceID: 1750}
-    - Class: 114
-      Script: {instanceID: 1768}
-    - Class: 114
-      Script: {instanceID: 2030}
-    - Class: 114
-      Script: {instanceID: 2324}
-    - Class: 114
-      Script: {instanceID: 2766}
-    - Class: 114
-      Script: {instanceID: 2944}
-    - Class: 114
-      Script: {instanceID: 3200}
-    - Class: 114
-      Script: {instanceID: 3264}
-    - Class: 114
-      Script: {instanceID: 3462}
-    - Class: 114
-      Script: {instanceID: 3586}
-    - Class: 114
-      Script: {instanceID: 4910}
-    - Class: 115
-      Script: {instanceID: 0}
-    - Class: 128
-      Script: {instanceID: 0}
-    - Class: 157
-      Script: {instanceID: 0}
-    - Class: 196
-      Script: {instanceID: 0}
-    - Class: 213
-      Script: {instanceID: 0}
-    - Class: 222
-      Script: {instanceID: 0}
-    - Class: 223
-      Script: {instanceID: 0}
-    - Class: 224
-      Script: {instanceID: 0}
-    Assets/Scenes/SampleScene.unity:
+    Assets/Scenes/Level.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -120,29 +67,29 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1476}
+      Script: {instanceID: 1482}
     - Class: 114
-      Script: {instanceID: 1750}
+      Script: {instanceID: 1756}
     - Class: 114
-      Script: {instanceID: 1768}
+      Script: {instanceID: 1774}
     - Class: 114
-      Script: {instanceID: 2324}
+      Script: {instanceID: 2332}
     - Class: 114
-      Script: {instanceID: 2766}
+      Script: {instanceID: 2774}
     - Class: 114
-      Script: {instanceID: 2944}
+      Script: {instanceID: 2952}
     - Class: 114
-      Script: {instanceID: 3200}
+      Script: {instanceID: 3208}
     - Class: 114
-      Script: {instanceID: 3462}
+      Script: {instanceID: 3472}
     - Class: 114
-      Script: {instanceID: 3586}
+      Script: {instanceID: 3598}
     - Class: 114
-      Script: {instanceID: 3812}
+      Script: {instanceID: 3826}
     - Class: 114
-      Script: {instanceID: 3970}
+      Script: {instanceID: 3984}
     - Class: 114
-      Script: {instanceID: 4884}
+      Script: {instanceID: 4900}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -152,6 +99,71 @@ ScriptsOnlyBuild:
     - Class: 196
       Script: {instanceID: 0}
     - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/Scenes/MainMenu.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1482}
+    - Class: 114
+      Script: {instanceID: 1756}
+    - Class: 114
+      Script: {instanceID: 1774}
+    - Class: 114
+      Script: {instanceID: 2036}
+    - Class: 114
+      Script: {instanceID: 2332}
+    - Class: 114
+      Script: {instanceID: 2774}
+    - Class: 114
+      Script: {instanceID: 2952}
+    - Class: 114
+      Script: {instanceID: 3208}
+    - Class: 114
+      Script: {instanceID: 3272}
+    - Class: 114
+      Script: {instanceID: 3396}
+    - Class: 114
+      Script: {instanceID: 3472}
+    - Class: 114
+      Script: {instanceID: 3598}
+    - Class: 114
+      Script: {instanceID: 3818}
+    - Class: 114
+      Script: {instanceID: 3930}
+    - Class: 114
+      Script: {instanceID: 4748}
+    - Class: 114
+      Script: {instanceID: 4926}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -174,28 +186,30 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1476}
+      Script: {instanceID: 1482}
     - Class: 114
-      Script: {instanceID: 1750}
+      Script: {instanceID: 1756}
     - Class: 114
-      Script: {instanceID: 1768}
+      Script: {instanceID: 1774}
     - Class: 114
-      Script: {instanceID: 2324}
+      Script: {instanceID: 2332}
     - Class: 114
-      Script: {instanceID: 2766}
+      Script: {instanceID: 2774}
     - Class: 114
-      Script: {instanceID: 2944}
+      Script: {instanceID: 2952}
     - Class: 114
-      Script: {instanceID: 3200}
+      Script: {instanceID: 3208}
     - Class: 114
-      Script: {instanceID: 3462}
+      Script: {instanceID: 3472}
     - Class: 114
-      Script: {instanceID: 3586}
+      Script: {instanceID: 3598}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -287,7 +301,7 @@ ScriptsOnlyBuild:
     className: HorizontalLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: 596a762002b4fe29651911c638f5a25f
+      Hash: 6114365de0adb6f95eddc27f48d02ef7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MenuController
@@ -449,6 +463,12 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
+      Hash: ba0b4508145a1f403f37c7e6a07316c6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SetLevelNumber
+  - hash:
+      serializedVersion: 2
       Hash: 748dd2a2a28da4e618912da5ac45684b
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
@@ -503,7 +523,13 @@ ScriptsOnlyBuild:
     className: TextContainer
   - hash:
       serializedVersion: 2
-      Hash: 41dcd36708105a437cf61e984a49035f
+      Hash: 0600539b9a153eb617700cd99b1d2fba
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LiveController
+  - hash:
+      serializedVersion: 2
+      Hash: 61c786633ca92de0e9c7b5ee22fb2131
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Controller
@@ -641,6 +667,12 @@ ScriptsOnlyBuild:
     className: SpriteShapeGeometryCache
   - hash:
       serializedVersion: 2
+      Hash: 110297d5111ed48a7821bb428a96a7ed
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayButton
+  - hash:
+      serializedVersion: 2
       Hash: b424b4eeb810aecb0ff91c62639241e9
     assemblyName: Unity.2D.Animation.Runtime.dll
     namespaceName: UnityEngine.Experimental.U2D.Animation
@@ -659,7 +691,7 @@ ScriptsOnlyBuild:
     className: TMP_ColorGradient
   - hash:
       serializedVersion: 2
-      Hash: a83457f5624c9f749c87ed97c83431e1
+      Hash: 2956c816665d7e25e9f6153ca6cd2846
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CreatingPanels
@@ -781,5 +813,5 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/StartScreen.unity
   - Assets/Scenes/MainMenu.unity
-  - Assets/Scenes/SampleScene.unity
+  - Assets/Scenes/Level.unity
   playerPath: C:/Users/tyuri/source/repos/Parasite-Che/APK/demo1.apk

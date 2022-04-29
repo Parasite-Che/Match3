@@ -182,7 +182,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 80
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -455,7 +455,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.80999756, y: -179.5}
+  m_AnchoredPosition: {x: -0.8100586, y: -179.5}
   m_SizeDelta: {x: -276.71002, y: 123.349976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &352276159
@@ -568,6 +568,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!1 &441502027
 GameObject:
@@ -603,10 +606,10 @@ RectTransform:
   m_Father: {fileID: 917356999}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: 0}
-  m_SizeDelta: {x: 1080, y: 1920}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.0034179688}
+  m_SizeDelta: {x: 0, y: 0.19995117}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &519420028
 GameObject:
@@ -750,7 +753,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 80
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -802,10 +805,10 @@ RectTransform:
   m_Father: {fileID: 772623055}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 225.54, y: 753}
-  m_SizeDelta: {x: 582.93, y: 116.38}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 177.54999, y: -78}
+  m_SizeDelta: {x: -350.71, y: 93.87}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &749610324
 MonoBehaviour:
@@ -829,7 +832,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 90
+    m_FontSize: 70
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 1
@@ -964,7 +967,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &782343089
@@ -982,7 +985,7 @@ GameObject:
   - component: {fileID: 782343094}
   - component: {fileID: 782343095}
   m_Layer: 5
-  m_Name: ToMap
+  m_Name: Restart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1005,8 +1008,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -153.03, y: 121}
-  m_SizeDelta: {x: 492.37, y: 156.5}
+  m_AnchoredPosition: {x: 144.09, y: 94}
+  m_SizeDelta: {x: 271.84, y: 90.56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &782343091
 MonoBehaviour:
@@ -1052,13 +1055,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1571448861}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: RestartTheApp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1118,6 +1121,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!114 &782343095
 MonoBehaviour:
@@ -1135,6 +1141,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!1 &786270577
 GameObject:
@@ -1250,10 +1259,10 @@ RectTransform:
   m_Father: {fileID: 1656169545}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -223.47, y: -798.1}
+  m_SizeDelta: {x: -134.49, y: 615.81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &789671708
 MonoBehaviour:
@@ -1328,10 +1337,10 @@ RectTransform:
   m_Father: {fileID: 1376512334}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -223.47, y: -798.1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.0000076294}
+  m_SizeDelta: {x: -132.92, y: 623.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &826334012
 MonoBehaviour:
@@ -1440,8 +1449,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 225.53998, y: -79}
-  m_SizeDelta: {x: -497.07, y: 113.68}
+  m_AnchoredPosition: {x: 176.81, y: -172.22992}
+  m_SizeDelta: {x: -352.21, y: 94.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &912390357
 MonoBehaviour:
@@ -1465,7 +1474,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 90
+    m_FontSize: 70
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 4
@@ -1533,7 +1542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1625,7 +1634,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0.00012207031}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1376512335
@@ -1703,8 +1712,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 215.43, y: -421.30002}
-  m_SizeDelta: {x: 376.34, y: 156.5}
+  m_AnchoredPosition: {x: 156, y: -227}
+  m_SizeDelta: {x: 273, y: 91.79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1459183087
 MonoBehaviour:
@@ -1816,6 +1825,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1502160847 stripped
 GameObject:
@@ -1862,10 +1874,10 @@ RectTransform:
   m_Father: {fileID: 772623055}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -322.63, y: 851}
-  m_SizeDelta: {x: -750.35, y: 137.77}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -220, y: -114}
+  m_SizeDelta: {x: -483.72, y: 137.77002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1511268653
 MonoBehaviour:
@@ -1977,6 +1989,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 772623054}
   second: {fileID: 441502027}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1571448859
 GameObject:
@@ -2015,8 +2030,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 261.54, y: 121}
-  m_SizeDelta: {x: 278.55, y: 156.5}
+  m_AnchoredPosition: {x: -144, y: 94}
+  m_SizeDelta: {x: 271.84, y: 90.56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1571448861
 MonoBehaviour:
@@ -2034,6 +2049,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!114 &1571448862
 MonoBehaviour:
@@ -2163,7 +2181,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -343}
+  m_AnchoredPosition: {x: -0.26501465, y: -152.90002}
   m_SizeDelta: {x: 0.5300293, y: 305.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1635324284
@@ -2188,7 +2206,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 90
+    m_FontSize: 80
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
@@ -2245,7 +2263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0.00012207031}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1656169546
@@ -2323,8 +2341,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -213.17, y: -421.30002}
-  m_SizeDelta: {x: 376.91, y: 156.5}
+  m_AnchoredPosition: {x: -154.91, y: -227}
+  m_SizeDelta: {x: 273.41, y: 91.79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1665734354
 MonoBehaviour:
@@ -2342,6 +2360,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1502160847}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 1910312596}
 --- !u!114 &1665734355
 MonoBehaviour:
@@ -2496,7 +2517,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 80
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -2507,7 +2528,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: To Map
+  m_Text: Restart
 --- !u!222 &1692112032
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2708,7 +2729,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.23498535, y: -339}
+  m_AnchoredPosition: {x: -0.23498535, y: -132.99}
   m_SizeDelta: {x: -0.4699707, y: 265.98}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1820621095
@@ -2733,7 +2754,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 90
+    m_FontSize: 80
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 1
@@ -2872,6 +2893,7 @@ MonoBehaviour:
   loseScreen: {fileID: 1656169544}
   WinScreen: {fileID: 1376512333}
   goalsList: []
+  objInFalling: []
   hold: 0
   lockDirectX: 0
   lockDirectY: 0
@@ -2902,7 +2924,7 @@ MonoBehaviour:
   isFalling: 0
   countOfPanelsOX: 9
   countOfPanelsOY: 10
-  startPosition: {x: -4, y: 5, z: 0}
+  startPosition: {x: -4, y: 6, z: 0}
 --- !u!114 &1821160012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2919,6 +2941,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 0}
   second: {fileID: 0}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1829448962
 GameObject:
@@ -2979,7 +3004,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 80
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -3149,6 +3174,9 @@ MonoBehaviour:
   LoadingPanel: {fileID: 0}
   first: {fileID: 441502027}
   second: {fileID: 772623054}
+  mapButton: {fileID: 0}
+  panelFromMenu: []
+  buttonFromMenu: []
   bar: {fileID: 0}
 --- !u!1 &1896825305
 GameObject:
