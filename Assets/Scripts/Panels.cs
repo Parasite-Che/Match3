@@ -35,7 +35,7 @@ public class Panels : MonoBehaviour
             {
                 Controller.objInFalling.Add(gameObject);
                 posInList = Controller.objInFalling.Count - 1;
-                Debug.Log(posInList);
+                //Debug.Log(posInList);
                 inList = true;
             }
             transform.position += new Vector3(0, -0.15f, 0);
@@ -66,6 +66,7 @@ public class Panels : MonoBehaviour
         {
             Controller.AllMatches(true, gameObject);
             fallen = false;
+            Debug.Log(gameObject);
         }
     }
 
@@ -124,6 +125,7 @@ public class Panels : MonoBehaviour
                 if (Controller.objInFalling[i] == gameObject)
                 {
                     Controller.objInFalling.RemoveAt(i);
+                    Debug.Log(Controller.objInFalling.Count);
                 }
             }
 
@@ -181,24 +183,33 @@ public class Panels : MonoBehaviour
                     hits[j].transform.gameObject.GetComponent<Panels>().falling++;
                 }
 
-                int rand = Random.Range(0, hits.Length);
-                if (bonusName == "_CubeBonus")
+                int rand = -1;
+                do
                 {
-                    _ = new BonusControl<CubeBonus>(hits[rand].transform.gameObject, new CubeBonus());
-                }
-                else if (bonusName == "_4LineBonus")
-                {
-                    _ = new BonusControl<LineBonus4>(hits[rand].transform.gameObject, new LineBonus4());
-                }
-                else if (bonusName == "_5LineBonus")
-                {
-                    _ = new BonusControl<LineBonus5>(hits[rand].transform.gameObject, new LineBonus5());
-                }
-                else if (bonusName == "_LinesOf3Panels")
-                {
-                    _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
-                }
-                Destroy(gameObject);
+                    rand = Random.Range(0, hits.Length);
+                    if (hits[rand].transform.gameObject.GetComponent<SpriteRenderer>().sprite != null)
+                    {
+                        if (bonusName == "_CubeBonus")
+                        {
+                            _ = new BonusControl<CubeBonus>(hits[rand].transform.gameObject, new CubeBonus());
+                        }
+                        else if (bonusName == "_4LineBonus")
+                        {
+                            _ = new BonusControl<LineBonus4>(hits[rand].transform.gameObject, new LineBonus4());
+                        }
+                        else if (bonusName == "_5LineBonus")
+                        {
+                            _ = new BonusControl<LineBonus5>(hits[rand].transform.gameObject, new LineBonus5());
+                        }
+                        else if (bonusName == "_LinesOf3Panels")
+                        {
+                            _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
+                        }
+
+                    }
+                } while (hits[rand].transform.gameObject.GetComponent<SpriteRenderer>().sprite == null);
+
+                    Destroy(gameObject);
                 creatingPanel.isFalling = false;
             }
         }
