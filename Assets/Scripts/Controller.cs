@@ -17,7 +17,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public int[] panelGoal;
     public int countOfMoves;
     public int countOfScore = 0;
-    int scorePerPanel = 10;
+    public int scorePerPanel = 10;
 
     public CreatingPanels creatingPanel;
     public GameObject currentPanel;
@@ -37,6 +37,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public bool lockDirectY = false;
     public bool matchFound = false;
     public bool verticalBonus = false;
+    bool setStar = false;
 
     public Text winText;
     public Text loseText;
@@ -52,10 +53,12 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Level level = new Level();
 
     JsonControl JC;
+    Save save;
 
     private void Awake()
     {
         JC = new JsonControl();
+        save = new Save();
         level = JC.LoadFromRecurces(PlayerPrefs.GetInt("Level number").ToString());
         Application.targetFrameRate = 60;
         
@@ -313,6 +316,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             for (int i = 0; i < panels.Length; i++)
             {
                 panels[i].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                countOfScore += scorePerPanel;
             }
         }
         else
@@ -321,6 +325,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
             for (int i = 0; i < panels.Length; i++)
             {
                 panels[i].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                countOfScore += scorePerPanel;
             }
         }
         currentPanel.GetComponent<SpriteRenderer>().sprite = null;
@@ -512,6 +517,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         for (int i = 0; i < allObj.Count; i++)
         {
             allObj[i].GetComponent<SpriteRenderer>().sprite = null;
+            countOfScore += scorePerPanel;
         }
     }
 
@@ -624,6 +630,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 PlayerPrefs.SetString("timeToAddLife", JsonConvert.SerializeObject(DateTime.Now.AddMinutes(24)));
             }
 
+            PlayerPrefs.SetInt("WinStreak", 0);
+            if (10 - Mathf.Ceil((float)(time - DateTime.Now).TotalMinutes / 24) <= 0)
+            {
+                loseScreen.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+            }
             loseText.text = "You lose!\nYour Score: " + countOfScore.ToString();
             for (int i = 0; i < goalsList.Length; i++)
             {
@@ -708,8 +719,11 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     void ClearPanelONDirect(GameObject obj, Vector3 dir)
     {
-        if(Physics2D.Raycast(new Vector3(obj.transform.position.x, obj.transform.position.y, 0), dir, 1f, LayerMask.GetMask("Panel")))
+        if (Physics2D.Raycast(new Vector3(obj.transform.position.x, obj.transform.position.y, 0), dir, 1f, LayerMask.GetMask("Panel")))
+        {
             Physics2D.Raycast(new Vector3(obj.transform.position.x, obj.transform.position.y, 0), dir, 1f, LayerMask.GetMask("Panel")).transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+            countOfScore += scorePerPanel;
+        }
     }
 
     public void ClearPanelWithAI(GameObject obj)
@@ -727,7 +741,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
                 currentPanel.GetComponent<SpriteRenderer>().sprite = null;
             }
         }
-
+        countOfScore += scorePerPanel;
         obj.GetComponent<BoxCollider2D>().enabled = false;
         if (Direction() == new Vector3(0, 1))
         {
@@ -789,6 +803,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         for (int i = 0; i < panelList.Count; i++)
         {
             panelList[i].GetComponent<SpriteRenderer>().sprite = null;
+            countOfScore += scorePerPanel;
         }
     }
 
@@ -833,6 +848,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         for (int i = 0; i < tiles.Count; i++)
         {
             tiles[i].GetComponent<SpriteRenderer>().sprite = null;
+            countOfScore += scorePerPanel;
         }
         obj.GetComponent<SpriteRenderer>().sprite = null;
     }
@@ -1036,6 +1052,50 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    public void Win()
+    {
+        PlayerPrefs.SetInt("WinStreak", PlayerPrefs.GetInt("WinStreak") + 1);
+
+        save = JC.LoadJson();
+        int curentStars = save.levels[PlayerPrefs.GetInt("Level number") - 1, 1];
+        save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] = countOfScore;
+        if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > (save.levels[PlayerPrefs.GetInt("Level number") - 1, 2]))
+        {
+            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 3;
+        }
+        else if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > ((save.levels[PlayerPrefs.GetInt("Level number") - 1, 2] * 2) / 3))
+        {
+            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 2;
+        }
+        else if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > (save.levels[PlayerPrefs.GetInt("Level number") - 1, 2] / 3))
+        {
+            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 1;    
+        }
+
+        if ((curentStars < save.levels[PlayerPrefs.GetInt("Level number") - 1, 1]) && !setStar)
+        {
+            save.stars += save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] - curentStars;
+            setStar = true;
+        }
+
+        JC.SaveJson(save);
+        field.SetActive(false);
+        WinScreen.SetActive(true);
+        if (loseScreen.activeSelf)
+        {
+            loseScreen.SetActive(false);
+        }
+
+        winText.text = "Great!\nYour Score: " + countOfScore.ToString();
+        for (int i = 0; i < goalsList.Length; i++)
+        {
+            if (goalsList[i] != null)
+            {
+                Destroy(goalsList[i]);
+            }
+        }
+    }
+
     ///      Find Matches and delete sprite     ///
     
     public List<GameObject> SingleClolorPanels()
@@ -1090,7 +1150,7 @@ public class Controller : MonoBehaviour, IBeginDragHandler, IDragHandler
         return matchingTiles;
     }
 
-    private List<GameObject> AllPanels()
+    public List<GameObject> AllPanels()
     {
         List<GameObject> allObj = new List<GameObject>();
         for (int i = 0; i < creatingPanel.countOfPanelsOX; i++)

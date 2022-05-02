@@ -54,6 +54,118 @@ public class CreatingPanels : MonoBehaviour
             previousLeft = -1;
             cp.x = startPosition.x;
         }
+
+        List<GameObject> allObj = controller.AllPanels();
+        rand = -1;
+        Debug.Log(PlayerPrefs.GetInt("WinStreak"));
+        switch (PlayerPrefs.GetInt("WinStreak"))
+        {
+            case 1:
+                rand = Random.Range(0, allObj.Count);
+                _ = new BonusControl<LineBonus4>(allObj[rand], new LineBonus4());
+                do
+                {
+                    rand = Random.Range(0, allObj.Count);
+                    if (allObj[rand].GetComponent<Panels>().ID < 300)
+                    {
+                        _ = new BonusControl<CubeBonus>(allObj[rand], new CubeBonus());
+                        break;
+                    }
+                } while (allObj[rand].GetComponent<Panels>().ID > 300);
+                break;
+            case 2:
+
+                rand = Random.Range(0, allObj.Count);
+                _ = new BonusControl<LineBonus4>(allObj[rand], new LineBonus4());
+                do
+                {
+                    rand = Random.Range(0, allObj.Count);
+                    if (allObj[rand].GetComponent<Panels>().ID < 300)
+                    {
+                        _ = new BonusControl<CubeBonus>(allObj[rand], new CubeBonus());
+                        break;
+                    }
+                } while (allObj[rand].GetComponent<Panels>().ID > 300);
+                
+                do
+                {
+                    rand = Random.Range(0, allObj.Count);
+                    if (allObj[rand].GetComponent<Panels>().ID < 300)
+                    {
+                        _ = new BonusControl<LinesOf3Panels>(allObj[rand], new LinesOf3Panels());
+                        break;
+                    }
+                } while (allObj[rand].GetComponent<Panels>().ID > 300);
+
+                break;
+            case 3:
+                rand = Random.Range(0, allObj.Count);
+                _ = new BonusControl<LineBonus4>(allObj[rand], new LineBonus4());
+                do
+                {
+                    rand = Random.Range(0, allObj.Count);
+                    if (allObj[rand].GetComponent<Panels>().ID < 300)
+                    {
+                        _ = new BonusControl<CubeBonus>(allObj[rand], new CubeBonus());
+                        break;
+                    }
+                } while (allObj[rand].GetComponent<Panels>().ID > 300);
+                
+                do
+                {
+                    rand = Random.Range(0, allObj.Count);
+                    if (allObj[rand].GetComponent<Panels>().ID < 300)
+                    {
+                        _ = new BonusControl<LinesOf3Panels>(allObj[rand], new LinesOf3Panels());
+                        break;
+                    }
+                } while (allObj[rand].GetComponent<Panels>().ID > 300);
+                
+                do
+                {
+                    rand = Random.Range(0, allObj.Count);
+                    if (allObj[rand].GetComponent<Panels>().ID < 300)
+                    {
+                        _ = new BonusControl<LineBonus5>(allObj[rand], new LineBonus5());
+                        break;
+                    }
+                } while (allObj[rand].GetComponent<Panels>().ID > 300);
+                break;
+        }
+        if (PlayerPrefs.GetInt("WinStreak") > 3)
+        {
+            rand = Random.Range(0, allObj.Count);
+            _ = new BonusControl<LineBonus4>(allObj[rand], new LineBonus4());
+            do
+            {
+                rand = Random.Range(0, allObj.Count);
+                if (allObj[rand].GetComponent<Panels>().ID < 300)
+                {
+                    _ = new BonusControl<CubeBonus>(allObj[rand], new CubeBonus());
+                    break;
+                }
+            } while (allObj[rand].GetComponent<Panels>().ID > 300);
+
+            do
+            {
+                rand = Random.Range(0, allObj.Count);
+                if (allObj[rand].GetComponent<Panels>().ID < 300)
+                {
+                    _ = new BonusControl<LinesOf3Panels>(allObj[rand], new LinesOf3Panels());
+                    break;
+                }
+            } while (allObj[rand].GetComponent<Panels>().ID > 300);
+
+            do
+            {
+                rand = Random.Range(0, allObj.Count);
+                if (allObj[rand].GetComponent<Panels>().ID < 300)
+                {
+                    _ = new BonusControl<LineBonus5>(allObj[rand], new LineBonus5());
+                    break;
+                }
+            } while (allObj[rand].GetComponent<Panels>().ID > 300);
+        }
     }
 
     ///     creating a panel at a specific point    ///
@@ -110,7 +222,6 @@ public class CreatingPanels : MonoBehaviour
                         rand = Random.Range(0, 6);
                         obj = Instantiate(controller.panels[rand].obj, new Vector3(panels[j].transform.position.x, startPosition.y + j + 1, 0), Quaternion.identity, field.transform);
                         obj.GetComponent<Panels>().ID = rand;
-                        //obj.GetComponent<Panels>().falling = (countOfPanelsOY - length - j);
                     }
                 }
             }

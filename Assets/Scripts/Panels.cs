@@ -66,7 +66,6 @@ public class Panels : MonoBehaviour
         {
             Controller.AllMatches(true, gameObject);
             fallen = false;
-            Debug.Log(gameObject);
         }
     }
 
@@ -148,26 +147,7 @@ public class Panels : MonoBehaviour
                         }
                         if (goals)
                         {
-                            JC = new JsonControl();
-                            save = JC.LoadJson();
-                            save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] = Controller.countOfScore;
-                            SetStars();
-                            JC.SaveJson(save);
-
-                            Controller.field.SetActive(false);
-                            Controller.WinScreen.SetActive(true);
-                            if (Controller.loseScreen.activeSelf)
-                            {
-                                Controller.loseScreen.SetActive(true);
-                            }
-                            Controller.winText.text = "Great!\nYour Score: " + Controller.countOfScore.ToString();
-                            for (int i = 0; i < Controller.goalsList.Length; i++)
-                            {
-                                if (Controller.goalsList[i] != null)
-                                {
-                                    Destroy(Controller.goalsList[i]);
-                                }
-                            }
+                            Controller.Win();
                         }
                     }
                 }
@@ -205,29 +185,12 @@ public class Panels : MonoBehaviour
                         {
                             _ = new BonusControl<LinesOf3Panels>(hits[rand].transform.gameObject, new LinesOf3Panels());
                         }
-
                     }
                 } while (hits[rand].transform.gameObject.GetComponent<SpriteRenderer>().sprite == null);
-
-                    Destroy(gameObject);
+                
+                Destroy(gameObject);
                 creatingPanel.isFalling = false;
             }
-        }
-    }
-
-    public void SetStars()
-    {
-        if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > (save.levels[PlayerPrefs.GetInt("Level number") - 1, 2]))
-        {
-            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 3;
-        }
-        else if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > ((save.levels[PlayerPrefs.GetInt("Level number") - 1, 2] * 2) / 3))
-        {
-            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 2;
-        }
-        else if (save.levels[PlayerPrefs.GetInt("Level number") - 1, 1] > (save.levels[PlayerPrefs.GetInt("Level number") - 1, 2] / 3))
-        {
-            save.levels[PlayerPrefs.GetInt("Level number") - 1, 0] = 1;
         }
     }
 }

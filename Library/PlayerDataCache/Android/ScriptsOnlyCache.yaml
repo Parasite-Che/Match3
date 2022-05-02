@@ -5,6 +5,7 @@ ScriptsOnlyBuild:
     - Controller
     - CreatingPanels
     - LiveController
+    - LosingByButton
     - MenuController
     - Panels
     - PlayButton
@@ -90,6 +91,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 3984}
     - Class: 114
       Script: {instanceID: 4900}
+    - Class: 114
+      Script: {instanceID: 63392}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -331,7 +334,7 @@ ScriptsOnlyBuild:
     className: AndroidReceivedNotificationMainThreadDispatcher
   - hash:
       serializedVersion: 2
-      Hash: 0c4dda80177fae77794651bd3365e104
+      Hash: 2a8080810444f0abf6301eeab4a90e7e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Authorization
@@ -529,7 +532,7 @@ ScriptsOnlyBuild:
     className: LiveController
   - hash:
       serializedVersion: 2
-      Hash: 61c786633ca92de0e9c7b5ee22fb2131
+      Hash: 68c5c5007f6beccbeaf069bd99a7cbc5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Controller
@@ -809,6 +812,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LosingByButton
   platform: 13
   scenePathNames:
   - Assets/Scenes/StartScreen.unity

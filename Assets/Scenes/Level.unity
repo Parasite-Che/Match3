@@ -428,6 +428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 352276158}
   - component: {fileID: 352276161}
+  - component: {fileID: 352276163}
   - component: {fileID: 352276160}
   - component: {fileID: 352276159}
   - component: {fileID: 352276162}
@@ -569,9 +570,22 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 1910312596}
+--- !u!114 &352276163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352276157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c71fae436afee4fb37bcd1e6020876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &441502027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,6 +1136,7 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 0}
@@ -1142,6 +1157,7 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 1910312596}
@@ -1826,6 +1842,7 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 0}
@@ -1990,6 +2007,7 @@ MonoBehaviour:
   first: {fileID: 772623054}
   second: {fileID: 441502027}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 0}
@@ -2050,6 +2068,7 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 1910312596}
@@ -2361,6 +2380,7 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 1910312596}
@@ -2922,6 +2942,7 @@ MonoBehaviour:
   field: {fileID: 850264257}
   controller: {fileID: 1821160010}
   isFalling: 0
+  check: 0
   countOfPanelsOX: 9
   countOfPanelsOY: 10
   startPosition: {x: -4, y: 6, z: 0}
@@ -2942,6 +2963,7 @@ MonoBehaviour:
   first: {fileID: 0}
   second: {fileID: 0}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 0}
@@ -3175,6 +3197,7 @@ MonoBehaviour:
   first: {fileID: 441502027}
   second: {fileID: 772623054}
   mapButton: {fileID: 0}
+  LC: {fileID: 0}
   panelFromMenu: []
   buttonFromMenu: []
   bar: {fileID: 0}
@@ -3265,6 +3288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2030248425}
   - component: {fileID: 2030248428}
+  - component: {fileID: 2030248429}
   - component: {fileID: 2030248427}
   - component: {fileID: 2030248426}
   m_Layer: 5
@@ -3388,6 +3412,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030248424}
   m_CullTransparentMesh: 1
+--- !u!114 &2030248429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030248424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c71fae436afee4fb37bcd1e6020876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3722859105863764037
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -65,6 +65,7 @@ public class LineBonus4 : IBonus
                         for (int j = 0; j < line.Length; j++)
                         {
                             line[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                            controller.countOfScore += controller.scorePerPanel;
                         }
                     }
 
@@ -74,6 +75,7 @@ public class LineBonus4 : IBonus
                         for (int j = 0; j < line2.Length; j++)
                         {
                             line2[j].transform.gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                            controller.countOfScore += controller.scorePerPanel;
                         }
                     }
                 }
@@ -229,6 +231,7 @@ public class LineBonus5 : IBonus
                 for (int i = 0; i < panels.Count; i++)
                 {
                     panels[i].GetComponent<SpriteRenderer>().sprite = null;
+                    controller.countOfScore += controller.scorePerPanel;
                 }
             }
         }
@@ -239,6 +242,7 @@ public class LineBonus5 : IBonus
             for (int i = 0; i < panels.Count; i++)
             {
                 panels[i].GetComponent<SpriteRenderer>().sprite = null;
+                controller.countOfScore += controller.scorePerPanel;
             }
         }
     }
