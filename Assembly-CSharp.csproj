@@ -56,18 +56,20 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\LosingByButton.cs" />
     <Compile Include="Assets\Scripts\MenuController.cs" />
     <Compile Include="Assets\Scripts\UIBonusBar.cs" />
     <Compile Include="Assets\Scripts\Authorization.cs" />
-    <Compile Include="Assets\Scripts\AllBonuses.cs" />
+    <Compile Include="Assets\Scripts\Level\AllBonuses.cs" />
     <Compile Include="Assets\Scripts\SetLevelNumber.cs" />
     <Compile Include="Assets\Scripts\LiveController.cs" />
-    <Compile Include="Assets\Scripts\Controller.cs" />
-    <Compile Include="Assets\Scripts\Panels.cs" />
+    <Compile Include="Assets\Scripts\Level\Controller.cs" />
+    <Compile Include="Assets\Scripts\Level\Panels.cs" />
     <Compile Include="Assets\Scripts\PlayButton.cs" />
-    <Compile Include="Assets\Scripts\CreatingPanels.cs" />
+    <Compile Include="Assets\Scripts\Level\VoidPanels.cs" />
+    <Compile Include="Assets\Scripts\Level\CreatingPanels.cs" />
     <Compile Include="Assets\Scripts\JsonControl.cs" />
-    <Compile Include="Assets\Scripts\LosingByButton.cs" />
+    <Compile Include="Assets\Scripts\Lerping.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JsonDotNet\link.xml" />

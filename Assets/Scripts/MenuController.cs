@@ -70,23 +70,23 @@ public class MenuController : MonoBehaviour
         {
             if (panelFromMenu[i].activeSelf)
             {
-                if (mapButton.GetComponent<Image>().color == new Color32(47, 162, 133, 255))
-                {
-                    mapButton.GetComponent<Image>().color = new Color32(87, 202, 173, 255);
-                }
                 for (int j = 0; j < buttonFromMenu.Count; j++)
                 {
                     if (buttonFromMenu[j].GetComponent<Image>().color != col)
                     {
-                        Debug.Log(buttonFromMenu[j].GetComponent<Image>().color);
+                        //buttonFromMenu[j].transform.GetChild(1).localScale -= new Vector3(0.5f, 0.5f, 0);
+                        //buttonFromMenu[j].transform.GetChild(1).localPosition = new Vector3(0, 0, 0);
+                        buttonFromMenu[j].GetComponent<Lerping>().BackLerp(buttonFromMenu[j].transform.GetChild(1).gameObject);
+                        buttonFromMenu[j].transform.GetChild(0).gameObject.SetActive(false);
                         buttonFromMenu[j].GetComponent<Image>().color = col;
-                        Debug.Log(buttonFromMenu[j]);
-                        Debug.Log(buttonFromMenu[j].GetComponent<Image>().color);
                         break;
                     }
                 }
-                gameObject.GetComponent<Image>().color -= new Color32(40, 40, 40, 0);
-
+                gameObject.GetComponent<Image>().color = new Color32(87, 202, 173, 255);
+                //gameObject.transform.GetChild(1).localScale += new Vector3(0.5f, 0.5f, 0);
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                gameObject.GetComponent<Lerping>().Lerp(gameObject.transform.GetChild(1).gameObject);
+                //gameObject.transform.GetChild(1).localPosition += new Vector3(0, 130, 0);
                 obj = panelFromMenu[i];
                 obj.SetActive(false);
                 first.SetActive(true);
