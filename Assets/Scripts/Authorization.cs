@@ -13,31 +13,29 @@ public class Authorization : MonoBehaviour
     public GameObject author;
     public string playerName = "";
     public InputField field;
+    public Text stars;
     JsonControl JC;
-
-    //int allStars = 0;
 
     private void Awake()
     {
-        
         playerName = PlayerPrefs.GetString("PlayerName");
         JC = new JsonControl();
         if (playerName == "")
         {
             PlayerPrefs.SetString("timeToAddLife", JsonConvert.SerializeObject(DateTime.Now));
+            PlayerPrefs.SetInt("WinStreak", 0);
             JC.SaveJson(JC.LoadSavesFromRecurces());
 
             menu.SetActive(false);
             author.SetActive(true);
         }
-
-        /*
+        
         Save lvl = JC.LoadJson();
         for (int i = 0; i < lvl.levels.GetLength(0); i++)
         {
-            allStars += lvl.levels[i, 0];
+            stars.text = lvl.stars.ToString();
         }
-        */
+        Debug.Log(PlayerPrefs.GetInt("WinStreak"));
     }
 
     public void AuthorButton()

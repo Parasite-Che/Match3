@@ -82,5 +82,6 @@ public class Save
 {
     public int lives;
     public int coins;
+    public int stars;
     public int[,] levels;
 }
